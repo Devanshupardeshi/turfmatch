@@ -1,0 +1,246 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'leaflet/dist/leaflet.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* TurfMatch design tokens — repo palette: deep navy + mint primary + amber secondary */
+:root {
+  --background: #0c1324;            /* deep navy */
+  --foreground: #dce2fa;            /* on-surface */
+
+  --card: #181f31;                  /* surface-container */
+  --card-foreground: #dce2fa;
+  --popover: #181f31;
+  --popover-foreground: #dce2fa;
+
+  --primary: #4edea3;               /* mint */
+  --primary-foreground: #003824;
+  --primary-container: #10b981;
+
+  --secondary: #ffb95f;             /* amber */
+  --secondary-foreground: #472a00;
+  --secondary-container: #ee9800;
+
+  --muted: #232a3c;                 /* surface-container-high */
+  --muted-foreground: #bbcabf;      /* on-surface-variant */
+
+  --accent: #4edea3;
+  --accent-foreground: #003824;
+
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+
+  --border: #232a3c;
+  --input: #232a3c;
+  --ring: #4edea3;
+  --radius: 0.75rem;
+
+  /* Surface elevation ladder (repo-spec) */
+  --surface-lowest: #070e1e;
+  --surface-low: #141b2c;
+  --surface: #0c1324;
+  --surface-container: #181f31;
+  --surface-container-high: #232a3c;
+  --surface-container-highest: #2e3447;
+  --surface-bright: #32394c;
+  --outline: #86948a;
+  --outline-variant: #3c4a42;
+
+  /* Brand glow */
+  --brand-glow: rgba(78, 222, 163, 0.35);
+  --amber-glow: rgba(255, 185, 95, 0.30);
+}
+
+@theme inline {
+  --font-sans: var(--font-lexend), 'Lexend Fallback', system-ui, sans-serif;
+  --font-display: var(--font-anton), 'Anton Fallback', 'Impact', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+  --radius-2xl: calc(var(--radius) + 16px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    background: var(--background);
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+}
+
+/* Anton display utility */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Custom animations ─── */
+@keyframes tm-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes tm-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes tm-pulse-glow {
+  0%, 100% { box-shadow: 0 0 24px var(--brand-glow); }
+  50%      { box-shadow: 0 0 40px var(--brand-glow); }
+}
+@keyframes tm-pulse-ring {
+  0%   { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.animate-fade-in    { animation: tm-fade-in 0.28s ease-out both; }
+.animate-slide-up   { animation: tm-slide-up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-pulse-glow { animation: tm-pulse-glow 2.4s ease-in-out infinite; }
+.animate-pulse-ring { animation: tm-pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+
+/* Subtle dotted texture overlay (repo design language) */
+.bg-pattern-overlay {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Hide scrollbars on horizontal carousels */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Safe-area helpers */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pt-safe { padding-top: env(safe-area-inset-top); }
+
+/* Safe-area utilities */
+@layer utilities {
+  .pb-nav {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  .pb-nav-xl {
+    padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Leaflet dark adjustments */
+.leaflet-container { background: var(--surface-low); }
+.leaflet-control-attribution { font-size: 9px !important; opacity: 0.4; }
+
+/* ─── Performance utilities ─── */
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* GPU-accelerated transforms for interactive elements */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* Smooth content fade-in */
+.content-fade {
+  animation: tm-fade-in 0.22s ease-out both;
+}
+
+/* Skeleton shimmer */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-container) 25%,
+    var(--surface-container-high) 50%,
+    var(--surface-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Screen transition: fade + subtle slide */
+@keyframes screen-enter {
+  from { opacity: 0; transform: translateY(6px) scale(0.995); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.screen-enter {
+  animation: screen-enter 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Press feedback: subtle scale + opacity */
+.press-feedback {
+  transition: transform 0.12s ease-out, opacity 0.12s ease-out;
+}
+.press-feedback:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+/* Card lift on press */
+.card-press {
+  transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.15s ease;
+}
+.card-press:active {
+  transform: scale(0.985);
+}
+
+/* Smooth image loading */
+img {
+  transition: opacity 0.2s ease;
+}
+img[loading="lazy"] {
+  opacity: 0;
+}
+img[loading="lazy"].loaded,
+img:not([loading="lazy"]) {
+  opacity: 1;
+}
+
+/* Content-visibility for off-screen sections */
+.content-visibility {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}

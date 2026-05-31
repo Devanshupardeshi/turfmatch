@@ -1,0 +1,138 @@
+name: OTA Deploy
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Release channel'
+        required: true
+        default: 'stable'
+        type: choice
+        options: [dev, beta, stable]
+      rollout_pct:
+        description: 'Staged rollout % (0-100)'
+        required: true
+        default: '100'
+      mandatory:
+        description: 'Mandatory update?'
+        required: true
+        default: false
+        type: boolean
+      release_notes:
+        description: 'Release notes'
+        required: false
+        default: ''
+
+env:
+  SUPABASE_URL: https://ziwzynzwrjcwrllmlwsy.supabase.co
+  BUCKET: app-bundles
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Export static bundle
+        run: npm run export
+
+      - name: Bump package.json version
+        id: version
+        run: |
+          npm version patch --no-git-tag-version
+          VERSION=$(node -p "require('./package.json').version")
+          BUILD=$(git rev-parse --short HEAD)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build=$BUILD" >> $GITHUB_OUTPUT
+
+      - name: Zip the bundle
+        run: |
+          cd out
+          zip -r ../bundle.zip .
+
+      - name: Compute checksum & size
+        id: checksum
+        run: |
+          echo "checksum=$(sha256sum bundle.zip | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "size_mb=$(du -m bundle.zip | awk '{print $1}')" >> $GITHUB_OUTPUT
+
+      - name: Upload to Supabase Storage
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          curl -f -X POST \
+            "${{ env.SUPABASE_URL }}/storage/v1/object/${{ env.BUCKET }}/app-v${{ steps.version.outputs.version }}.zip" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary @bundle.zip
+
+      - name: Insert into app_versions
+        env:
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          CHANNEL="${{ github.event.inputs.channel || 'stable' }}"
+          ROLLOUT="${{ github.event.inputs.rollout_pct || '100' }}"
+          MANDATORY="${{ github.event.inputs.mandatory || false }}"
+          NOTES="${{ github.event.inputs.release_notes || 'Auto-deploy from ' }}${{ github.sha }}"
+          BUNDLE_URL="${{ env.SUPABASE_URL }}/storage/v1/object/public/${{ env.BUCKET }}/app-v${{ steps.version.outputs.version }}.zip"
+
+          curl -f -X POST "${{ env.SUPABASE_URL }}/rest/v1/app_versions" \
+            -H "apikey: ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=minimal" \
+            -d "{
+              \"version\": \"${{ steps.version.outputs.version }}\",
+              \"build_number\": ${{ github.run_number }},
+              \"platform\": \"all\",
+              \"channel\": \"${CHANNEL}\",
+              \"status\": \"active\",
+              \"bundle_url\": \"${BUNDLE_URL}\",
+              \"bundle_checksum\": \"sha256:${{ steps.checksum.outputs.checksum }}\",
+              \"bundle_size_mb\": ${{ steps.checksum.outputs.size_mb }},
+              \"is_mandatory\": ${MANDATORY},
+              \"rollout_pct\": ${ROLLOUT},
+              \"release_notes\": \"${NOTES}\",
+              \"published_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }"
+
+      - name: Commit version bump
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.version }} [skip ci]"
+          git push
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "## OTA Deploy Success" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${{ steps.version.outputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ steps.version.outputs.build }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Channel | ${{ github.event.inputs.channel || 'stable' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Rollout | ${{ github.event.inputs.rollout_pct || '100' }}% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Size | ${{ steps.checksum.outputs.size_mb }} MB |" >> $GITHUB_STEP_SUMMARY
+          echo "| Checksum | \`sha256:${{ steps.checksum.outputs.checksum }}\` |" >> $GITHUB_STEP_SUMMARY
