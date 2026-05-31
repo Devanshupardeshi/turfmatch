@@ -6,8 +6,9 @@ __v0_jsx-dev-runtime.ts
 .v0-trash/
 .vercel/
 
-# Environment variables
+# Environment variables & secrets
 .env*.local
+google-services.json
 
 # Common ignores
 node_modules/
