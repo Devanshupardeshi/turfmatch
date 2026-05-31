@@ -64,14 +64,39 @@ India has **30 million+ recreational cricketers** playing on **50,000+ box crick
 
 ---
 
+## 🔍 How Turf Search Actually Works
+
+This is one of the things we're most proud of. Here's what happens behind the scenes when you open the app and look for a turf:
+
+**Step 1 — We grab your location.**
+The app uses Capacitor's native GPS (not browser geolocation — it's faster and more accurate). If that fails, we fall back to the browser API. If *that* also fails, we default to Pune and let you search manually. No location = no stuck screen. Ever.
+
+**Step 2 — We fire 4 Google Places searches simultaneously.**
+Not one search. Four. We search for `"sports turf ground"`, `"cricket ground turf"`, `"box cricket turf"`, and `"football turf futsal court"` — all within a 15 km radius of you. This catches turfs that would be missed by a single generic query.
+
+**Step 3 — We deduplicate and score every result.**
+Google returns all kinds of garbage — restaurants, hotels, amusement parks. So we built a custom relevance engine:
+- Every result gets scored: **name keyword matches (×25 points)** + **address matches (×5)** + **sports Google type bonus (×15)**
+- We hard-reject 40+ irrelevant Google place types (banks, hospitals, malls, temples, car dealers...)
+- If a place has zero turf keywords AND zero sports types → rejected immediately
+- Everything that scores > 0 gets ranked by relevance, then sorted by distance
+
+**Step 4 — We enrich the data.**
+Google Places doesn't know cricket. It doesn't know slot timings, pitch types, or prices. So we use a deterministic hash function on each `placeId` to generate consistent, realistic cricket metadata — price per hour, available slots, pitch type, amenities. Same place always gets the same data.
+
+**Step 5 — You see real turfs, closest first, with everything you need.**
+Photos (from Google), ratings, distance, price, slot availability, one-tap call, and one-tap navigation. The whole thing takes about 2 seconds.
+
+---
+
 ## ✨ Features — What Makes Us Different
 
 ### 🏟️ Smart Turf Discovery
 - **Live Google Places API integration** — discovers real turfs within 15 km radius
-- **4 parallel search queries** (sports turf, cricket ground, box cricket, football turf) with intelligent **relevance scoring** and blocked-type filtering
+- **4 parallel search queries** with intelligent **relevance scoring** and blocked-type filtering
 - **Haversine distance sorting** — closest turfs first
 - Real-time **slot availability**, price comparison, pitch type, and amenity filters
-- **Deterministic mock hydration** — enriches Google data with cricket-specific metadata (prices, slots, features)
+- **Deterministic mock hydration** — enriches Google data with cricket-specific metadata
 
 ### 🗺️ Turn-by-Turn Navigation
 - **Google Routes API v2** with traffic-aware routing
@@ -606,18 +631,43 @@ git push main  →  GitHub Actions  →  Next.js build  →  zip + SHA-256
 
 ---
 
-## 🏅 Why TurfMatch Wins
+## ❓ FAQ
 
-| Criteria | Our Strength |
-|----------|-------------|
-| **Technical Depth** | 22,143 lines of production TypeScript across 152 files |
-| **Production Ready** | Live on [www.turfmatch.app](https://www.turfmatch.app) with OTA updates |
-| **Real Users, Real Problem** | 30M+ cricketers have no organized platform |
-| **Full Stack** | Frontend + Backend + Native + CI/CD + Push + OTA + Maps + Realtime |
-| **Scalable Architecture** | Supabase scales to millions; Capacitor supports iOS with zero rewrite |
-| **Revenue Ready** | 5 clear monetization paths from Day 1 |
-| **Mobile-Native Feel** | Custom navigation stack, native notifications, safe-area handling |
-| **Zero Server Cost** | Static export + Supabase free tier = $0/month to start |
+**"Is this actually live or just a hackathon prototype?"**
+
+It's live. Download it from [www.turfmatch.app](https://www.turfmatch.app) right now on any Android phone. We have OTA updates running, push notifications working, real Google Maps turf discovery — the whole thing. This isn't a Figma mockup.
+
+**"How do you find turfs? Is it a static database?"**
+
+No static database. We hit the Google Places API (New) in real-time, fire 4 parallel searches, score every result with our own relevance engine, filter out the junk (Google loves returning restaurants and hotels), and show you actual turfs sorted by distance. Every time you open the app, you get fresh results based on where you are right now.
+
+**"What happens if I'm offline or have bad network?"**
+
+The app doesn't crash or hang. We have a full offline resilience stack — cached data survives across tabs and app restarts, every API call has a 10-second hard timeout, failed requests retry 3 times with exponential backoff, and there's a loading safety net that force-resolves after 8 seconds so you're never stuck on a spinner. If you're completely offline, you see a clean offline banner with a retry button.
+
+**"Do you have your own backend server?"**
+
+No. Zero server cost. The app is a Next.js static export (pure HTML/JS/CSS) wrapped in Capacitor for Android. All the backend — database, auth, file storage, realtime WebSockets — is Supabase. Push notifications go through Firebase Cloud Messaging. This means we can serve thousands of users on Supabase's free tier before we ever need to pay for infrastructure.
+
+**"How do OTA updates work?"**
+
+When we push code to `main`, a GitHub Actions workflow automatically builds the Next.js bundle, zips it, computes a SHA-256 checksum, uploads it to Supabase Storage, and inserts a version record. Next time any user opens the app, it checks for updates, downloads the new bundle, verifies the checksum, and hot-swaps the code. No app store review needed. If something goes wrong, it auto-rolls back after 3 consecutive failures.
+
+**"Why not React Native or Flutter?"**
+
+Because we wanted to move fast with a web tech stack we already knew (React/Next.js) and still ship a native Android app. Capacitor gives us native APIs (GPS, push, filesystem) while letting us write everything in TypeScript. When we're ready for iOS, we just run `npx cap add ios` — same codebase, no rewrite.
+
+**"Can I use this for football / badminton / other sports?"**
+
+Not yet, but it's coming. The turf search already discovers football turfs and futsal courts. The data model supports a `sportType` field on matches. Multi-sport support is on the v3.0 roadmap.
+
+**"How is player privacy handled?"**
+
+Phone numbers are never shown publicly. We have a "Phone Gate" — your number is shared only with confirmed squad members (people who are actually playing in the same match as you) and only during the match window. Supabase Row-Level Security ensures users can only read/write their own data at the database level.
+
+**"What's the tech stack in one sentence?"**
+
+Next.js 16 + React 19 + TypeScript + Tailwind CSS 4 + Supabase (Postgres + Auth + Realtime + Storage) + Capacitor 8 (Android) + Firebase FCM + Google Places/Routes APIs + GitHub Actions CI/CD.
 
 ---
 
@@ -629,7 +679,7 @@ git push main  →  GitHub Actions  →  Next.js build  →  zip + SHA-256
     <img src="https://img.shields.io/badge/Download_TurfMatch-4edea3?style=for-the-badge&logoColor=white&logo=google-play" alt="Download" />
   </a>
   <br/><br/>
-  <sub>Built with ❤️ for India's 30 million recreational cricketers</sub>
+  <sub>Built with ❤️ in Pune, India 🇮🇳</sub>
   <br/>
   <sub>© 2026 TurfMatch · All rights reserved</sub>
 </p>
