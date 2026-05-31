@@ -1,274 +1,331 @@
-<p align="center">
-  <img src="public/logo-turf-match.png" alt="TurfMatch Logo" width="220" />
-</p>
+<div align="center">
 
-<h1 align="center">🏏 TurfMatch</h1>
+<img src="public/logo-turf-match.png" alt="TurfMatch" width="140" />
 
-<p align="center">
-  <strong>India's First Real-Time Sports Matchmaking Platform</strong><br/>
-  <em>Find Players. Book Turfs. Play Instantly.</em>
-</p>
+# TurfMatch
 
-<p align="center">
-  <a href="https://www.turfmatch.app">🌐 www.turfmatch.app</a> &nbsp;·&nbsp;
-  <a href="https://www.turfmatch.app">📱 Download App</a> &nbsp;·&nbsp;
-  <a href="#demo">🎥 Live Demo</a> &nbsp;·&nbsp;
-  <a href="#architecture">🏗️ Architecture</a>
-</p>
+### India's First Real-Time Sports Matchmaking Platform
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 16" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
-  <img src="https://img.shields.io/badge/Supabase-Realtime-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Capacitor-8-119EFF?style=for-the-badge&logo=capacitor&logoColor=white" alt="Capacitor 8" />
-  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-</p>
+**Find Players · Book Turfs · Play Instantly**
+
+[![Live App](https://img.shields.io/badge/🌐_Live_App-turfmatch.app-4edea3?style=for-the-badge)](https://www.turfmatch.app)
+[![Download APK](https://img.shields.io/badge/📲_Download-Android_APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://www.turfmatch.app)
+
+---
+
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-Realtime-3FCF8E?style=flat-square&logo=supabase&logoColor=white)
+![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?style=flat-square&logo=capacitor&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+
+![Lines of Code](https://img.shields.io/badge/Lines_of_Code-22%2C143-blueviolet?style=flat-square)
+![Screens](https://img.shields.io/badge/Screens-30-orange?style=flat-square)
+![TypeScript Files](https://img.shields.io/badge/TS_Files-152-3178C6?style=flat-square)
+![Platform](https://img.shields.io/badge/Platform-Android_%2F_Web-3DDC84?style=flat-square)
+
+</div>
+
+---
+
+## Table of Contents
+
+- [The Problem](#-the-problem)
+- [The Solution](#-the-solution)
+- [How Turf Search Works](#-how-turf-search-works)
+- [Features](#-features)
+- [Admin Dashboard & OTA System](#-admin-dashboard--ota-system)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#️-project-structure)
+- [Quick Start](#-quick-start)
+- [Environment Variables](#-environment-variables)
+- [Database Schema](#-database-schema)
+- [Security & Privacy](#-security--privacy)
+- [Engineering Highlights](#-engineering-highlights)
+- [Design System](#-design-system)
+- [Business Model](#-business-model)
+- [Roadmap](#️-roadmap)
+- [Contributing](#-contributing)
+- [FAQ](#-faq)
 
 ---
 
 ## 🎯 The Problem
 
-> **70%+ of recreational cricket matches in India get cancelled** because organizers can't fill enough player slots in time, and players can't find nearby matches that fit their schedule, skill level, and budget.
+> **70%+ of recreational cricket matches in India get cancelled** — not because people don't want to play, but because the logistics are broken.
 
-India has **30 million+ recreational cricketers** playing on **50,000+ box cricket turfs** — yet there's **no organized marketplace** connecting them. Today's workflow is:
+India has **30 million+ recreational cricketers** spread across **50,000+ box cricket turfs**, yet there's no organized marketplace connecting them. The current reality:
 
-| Step | Current Reality | Pain Level |
-|------|----------------|------------|
-| Finding players | WhatsApp groups, begging friends | 😤 High |
-| Booking a turf | Calling 10 turfs, checking availability | 😤 High |
-| Skill matching | No way to gauge skill level | 😡 Very High |
-| Payment collection | Cash at venue, people don't pay | 🤬 Extreme |
-| Live scoring | Paper scorecards, lost data | 😤 High |
-| Navigation to turf | Searching Google Maps separately | 😑 Medium |
+| Step | What People Do Today | Frustration |
+|------|----------------------|-------------|
+| Finding players | Spam WhatsApp groups, beg friends | 😤 High |
+| Booking a turf | Call 10 venues, no online availability | 😤 High |
+| Gauging skill | Pure guesswork, no profile system | 😡 Very High |
+| Collecting payment | Cash at venue, chasing people | 🤬 Extreme |
+| Live scoring | Paper scorecards, data gets lost | 😤 High |
+| Getting there | Separate Google Maps search | 😑 Medium |
 
-**TurfMatch eliminates all of this with a single tap.**
+**TurfMatch solves all six in a single app.**
 
 ---
 
 ## 💡 The Solution
 
-**TurfMatch** is a **production-ready mobile app** that acts as the **Tinder + BookMyShow for recreational cricket**:
+**TurfMatch** is the **Tinder + BookMyShow for recreational cricket** — a production-ready Android app (and PWA) that takes you from "I want to play" to "on the ground" in under 2 minutes.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   🏟️  DISCOVER  →  🤝  MATCH  →  📍  NAVIGATE  →  🏏  PLAY   │
-│                                                                 │
-│   Nearby turfs      Skill-based     Turn-by-turn    Live ball   │
-│   Live slots        Smart join      Google Routes    scorecard   │
-│   Price compare     Squad chat      ETA tracking     Stats      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│   🏟️  DISCOVER     →    🤝  MATCH      →   📍  NAVIGATE   →  🏏 PLAY  │
+│                                                                      │
+│   Real turfs            Skill-based        Turn-by-turn    Ball-by-  │
+│   near you now          smart join         Google Routes   ball live │
+│   Live slots            Squad chat         ETA tracking    scorecard │
+│   Price compare         Reliability        Polyline map    Stats     │
+│                         scores                                       │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🔍 How Turf Search Actually Works
+## 🔍 How Turf Search Works
 
-This is one of the things we're most proud of. Here's what happens behind the scenes when you open the app and look for a turf:
+One of the most interesting pieces of the system — here's what happens in the ~2 seconds between you opening the app and seeing nearby turfs:
 
-**Step 1 — We grab your location.**
-The app uses Capacitor's native GPS (not browser geolocation — it's faster and more accurate). If that fails, we fall back to the browser API. If *that* also fails, we default to Pune and let you search manually. No location = no stuck screen. Ever.
+```
+Step 1 ──▶  Native GPS (Capacitor)
+               └─ fails? ──▶  Browser Geolocation API
+                                 └─ fails? ──▶  Default to Pune + manual search
 
-**Step 2 — We fire 4 Google Places searches simultaneously.**
-Not one search. Four. We search for `"sports turf ground"`, `"cricket ground turf"`, `"box cricket turf"`, and `"football turf futsal court"` — all within a 15 km radius of you. This catches turfs that would be missed by a single generic query.
+Step 2 ──▶  Fire 4 parallel Google Places queries:
+               • "sports turf ground"
+               • "cricket ground turf"
+               • "box cricket turf"
+               • "football turf futsal court"
+               (all within 15 km radius)
 
-**Step 3 — We deduplicate and score every result.**
-Google returns all kinds of garbage — restaurants, hotels, amusement parks. So we built a custom relevance engine:
-- Every result gets scored: **name keyword matches (×25 points)** + **address matches (×5)** + **sports Google type bonus (×15)**
-- We hard-reject 40+ irrelevant Google place types (banks, hospitals, malls, temples, car dealers...)
-- If a place has zero turf keywords AND zero sports types → rejected immediately
-- Everything that scores > 0 gets ranked by relevance, then sorted by distance
+Step 3 ──▶  Deduplicate + score every result:
+               Score = (name keyword matches × 25)
+                     + (address keyword matches × 5)
+                     + (sports Google type bonus × 15)
 
-**Step 4 — We enrich the data.**
-Google Places doesn't know cricket. It doesn't know slot timings, pitch types, or prices. So we use a deterministic hash function on each `placeId` to generate consistent, realistic cricket metadata — price per hour, available slots, pitch type, amenities. Same place always gets the same data.
+               Hard-REJECT:  40+ blocked types
+                             (banks, restaurants, hospitals, temples…)
+               Hard-REQUIRE: ≥1 turf keyword  OR  ≥1 sports type
 
-**Step 5 — You see real turfs, closest first, with everything you need.**
-Photos (from Google), ratings, distance, price, slot availability, one-tap call, and one-tap navigation. The whole thing takes about 2 seconds.
+Step 4 ──▶  Enrich with cricket metadata:
+               Deterministic hash(placeId) → price/hr, slots,
+               pitch type, amenities  (same place = same data, always)
+
+Step 5 ──▶  Render: photos, rating, distance, price, slots,
+               one-tap call, one-tap navigation
+```
 
 ---
 
-## ✨ Features — What Makes Us Different
+## ✨ Features
 
 ### 🏟️ Smart Turf Discovery
-- **Live Google Places API integration** — discovers real turfs within 15 km radius
-- **4 parallel search queries** with intelligent **relevance scoring** and blocked-type filtering
-- **Haversine distance sorting** — closest turfs first
-- Real-time **slot availability**, price comparison, pitch type, and amenity filters
-- **Deterministic mock hydration** — enriches Google data with cricket-specific metadata
+- **Live Google Places API** — real turfs within 15 km, refreshed every open
+- **4-query parallel search** with custom relevance scoring and 40+ blocked types
+- **Haversine distance sort** — closest first, always
+- Filter by price range, distance, pitch type, rating, amenities
+- **Deterministic data hydration** — cricket metadata seeded consistently per venue
 
 ### 🗺️ Turn-by-Turn Navigation
-- **Google Routes API v2** with traffic-aware routing
-- **Polyline decoding** with smooth rendered route overlay
-- **Step-by-step navigation instructions** with maneuver icons
-- **OSRM fallback** — if Google Routes is unavailable, seamlessly falls back to open-source routing
-- **Leaflet + Google Maps dual-mode** map rendering
+- **Google Routes API v2** with live traffic awareness
+- Rendered route polyline with smooth overlay
+- Step-by-step maneuver instructions with icons
+- **OSRM open-source fallback** — zero navigation downtime
+- **Dual-mode maps**: Leaflet (offline/cost-saving) + Google Maps (full quality)
 
 ### 🤝 Intelligent Matchmaking
-- Create public, private, or invite-only matches
-- **Skill-level filtering** (Beginner / Intermediate / Pro)
-- **Reliability scores** — players are rated on their join-rate (0–100%)
-- **Gamified leveling system** with badges (Rising → Pro → Elite)
-- **Real-time slot tracking** — see "11/14 filled" with live updates
-- **Smart invite system** — organizers can invite specific players based on role, skill, and availability
+- Public, private, or invite-only match creation
+- **Skill filtering**: Beginner / Intermediate / Pro
+- **Reliability scores** (0–100%) based on historical join-rate
+- **Gamified badges**: Rising Star → Club Pro → Elite
+- Live slot counter: `11/14 filled` — updates across all devices < 500ms
+- Smart invites filtered by role, skill, and zone
 
-### 📱 Real-Time Everything (Supabase Realtime)
-- **Live match updates** — slots fill in real-time across all devices
-- **Live notification delivery** — instant in-app + push notifications
-- **Live join request updates** — organizers see requests appear instantly
-- **Live invite tracking** — players see invites arrive in real-time
-- Each realtime channel uses **unique IDs** to prevent Supabase channel collisions
+### 📡 Real-Time Everything
+- Supabase Realtime (WebSocket) channels — zero polling
+- Live slot updates, join requests, notifications, invites, badge counts
+- Unique channel IDs prevent Supabase collision across concurrent sessions
 
-### 🔔 Enterprise-Grade Notification System
-- **FCM Push Notifications** (foreground + background + killed state)
-- **Android Notification Channels** with per-category priority, sound, and vibration
-- **Event deduplication** — prevents duplicate alerts with TTL-based tracking
-- **Debounce engine** — coalesces rapid events (e.g., 10 players joining in 5 seconds)
-- **Deep-link routing** — tapping a notification navigates directly to the relevant screen
-- **Custom action buttons** — Accept/Decline actions directly from the notification tray
-- **Engagement tracking** — delivered/displayed/tapped analytics per notification
+### 🔔 Enterprise Push Notifications
+- **FCM** — foreground, background, and killed-state delivery
+- 5 Android notification channels with priority, sound, and vibration per category
+- TTL-based **event deduplication** engine
+- **Debounce coalescence** — 10 rapid joins → 1 smart notification
+- **Deep-link routing** — tap navigates directly to the relevant screen
+- Accept / Decline action buttons from the notification shade
+- Delivered / displayed / tapped engagement analytics
 
 ### 🏏 Live Scoring Engine
-- **Ball-by-ball scorecard** with strike rate, run rate, and projected score
-- Striker/Non-Striker batting stats with boundaries breakdown
-- Bowler stats with economy rate
-- **Recent balls strip** with visual indicators (4s, 6s, Ws)
-- Score entry interface for match organizers
+- Ball-by-ball input for organizers
+- Batter stats: runs, balls, SR, 4s, 6s; bowler stats: overs, runs, wkts, econ
+- Real-time projected score, run rate, required rate
+- Visual recent-balls strip (4s green, 6s blue, Ws red)
 
-### 🏆 Tournament System
-- **Full tournament lifecycle** — registration → brackets → fixtures → results
-- **Interactive bracket visualization** (QF → SF → Final)
-- Live fixture tracking with over-by-over scores
-- Team registration with squad management
-- Prize pool display and entry fee management
+### 🏆 Tournaments
+- Full lifecycle: registration → seeding → brackets → fixtures → results
+- Interactive bracket (QF → SF → Final) with live score overlays
+- Prize pool, entry fee, and team count management
 
-### 👤 Player Profiles & Privacy
-- **Career statistics** — matches, win rate, runs, wickets, economy
-- **Recent form** — last 3 match results with margins
-- **Availability windows** — today / tomorrow / this weekend
-- **Phone privacy gate** — numbers shared ONLY with confirmed squad members during match window
-- **Zone-based discovery** — find players in your neighborhood (Baner, Wakad, Hinjewadi, etc.)
+### 👤 Privacy-First Profiles
+- Career stats, win rate, zone, badge tier
+- Phone numbers behind a **Privacy Gate** — visible only to confirmed squad during match window
+- Supabase RLS enforces this at the database level
 
-### 💬 Match Chat
-- **Per-match chat rooms** — every match gets a dedicated thread
-- System messages for events (booking confirmed, player arrived)
-- Location-sharing messages
-- Unread badge counters
+### 💬 Squad Chat
+- Per-match chat rooms, auto-created on match creation
+- System event messages (booking confirmed, player joined, navigation started)
+- Unread badge counters with realtime sync
 
-### 🔄 Over-the-Air Updates
-- **Full OTA pipeline** — ship new features without app store review
-- **CI/CD via GitHub Actions** → builds bundle → uploads to Supabase Storage → inserts version record
-- **Staged rollouts** — 0-100% gradual rollout with channel targeting (dev/beta/stable)
-- **Automatic rollback** — consecutive failure detection with safe revert
-- **Integrity verification** — SHA-256 checksum validation on every download
-- **Device state machine** — tracks downloading → rebooting → idle → failed states
-
-### 📲 Native APK Self-Update
-- **Custom Capacitor plugin** (`ApkUpdater`) for full APK downloads
-- Download progress with bytes/sec speed indicator
-- Install permission management (REQUEST_INSTALL_PACKAGES)
-- Free space verification before download
-- Cached APK management and cleanup
-- **Web stub fallbacks** — graceful degradation when running in browser
-
-### 🛡️ Bulletproof Bootstrap System
-- **5-stage deterministic startup** prevents race conditions:
-  ```
-  Network Ready → Auth Hydrated → Supabase Ready → Location Resolved → App Ready
-  ```
-- **Guarded fetch** — blocks all API calls until auth and network are confirmed
-- **Session persistence** — survives app kills with localStorage hydration
-- **Hard timeout safety nets** — no loading state ever lasts > 8 seconds
-- **Startup diagnostics logger** — full boot timeline for debugging cold starts
+### 🛡️ Bulletproof Bootstrap
+5-stage deterministic startup — zero race conditions:
+```
+NETWORK_READY → AUTH_HYDRATED → QUERY_READY → LOCATION_RESOLVED → APP_READY
+```
+Each stage gates the next. A query cannot fire before auth. Loading never hangs > 8s.
 
 ### 🌐 Offline Resilience
-- **Online/Offline detection** with visual banner
-- **In-memory caching** — global caches for matches, my-matches, and player data survive tab switches
-- **Background refresh** — silently re-fetches when app returns from background
-- **Retry with exponential backoff** — automatic 3-attempt retry on network failure
-- **Request timeout protection** — 10-second hard cap on every Supabase query
+- Online/offline banner with visual indicator
+- In-memory caches survive tab switches and app restores
+- Background silent refresh on foreground
+- 3-attempt retry with exponential backoff
+- 10-second hard timeout on every Supabase query
+
+---
+
+## 🖥️ Admin Dashboard & OTA System
+
+TurfMatch includes a **separate admin web panel** (not included in this repo) with a full **APK distribution & OTA update system**:
+
+### How OTA Updates Work
+
+```
+Admin uploads signed APK via dashboard
+      │
+      ├─ Phase 1: HASH
+      │    Client-side SHA-256 via Web Crypto API
+      │
+      ├─ Phase 2: SIGN
+      │    POST /api/admin/apk/sign-upload
+      │    ├─ Validates semver, versionCode, fileSize, sha256
+      │    ├─ Creates Supabase Storage signed upload URL
+      │    └─ Inserts DRAFT row in `app_versions` table
+      │
+      ├─ Phase 3: UPLOAD
+      │    XHR PUT directly to Supabase Storage (bypasses Vercel 4.5 MB limit)
+      │    └─ Real-time progress: bytes uploaded, %, KB/s speed, ETA countdown
+      │
+      └─ Phase 4: FINALIZE
+           POST /api/admin/apk/finalize
+           ├─ Verifies APK exists in storage bucket
+           ├─ Archives previous active version on same channel
+           └─ Sets status → "active", published_at = now()
+```
+
+### Version Check Flow (called by the app on every launch)
+
+```
+GET /api/version.json?deviceId=xxx&versionCode=2&channel=stable&sdk=31
+
+Server logic:
+  ├─ Is target versionCode > device's current?  → yes: update available
+  ├─ Is device SDK ≥ min_android_sdk?            → no:  update blocked
+  ├─ Is rollout_pct < 100?                       → hash(deviceId) % 100 to decide
+  ├─ Is update mandatory?                        → bypasses staged rollout
+  └─ Upserts device_update_state for dashboard "active devices" counter
+```
+
+### Admin Dashboard Features
+
+| Feature | Details |
+|---------|---------|
+| **Upload signed APK** | Drag-and-drop with SHA-256 verification |
+| **Version management** | Activate / Archive / Rollback / Delete per version |
+| **Staged rollouts** | 0–100% slider, device hash bucketing |
+| **Mandatory toggle** | Force-update blocks app until installed |
+| **Channel targeting** | dev / beta / stable release channels |
+| **Install analytics** | Success / failed / in-progress counts per version |
+| **Device tracking** | Active devices (7d), devices by version bar chart |
+| **Failure alerting** | ⚠️ warning badge when failure rate > 5% |
+| **Realtime refresh** | Dashboard auto-refreshes via Supabase subscription |
+
+### Auto-Rollback (Client-Side)
+
+The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive failures:
+- 3 failed installs in a row → **automatic rollback** to last stable bundle
+- Device state machine: `idle → downloading → rebooting → idle` (or `→ failed`)
+- All bundles verified by SHA-256 checksum before hot-swap
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                         PRESENTATION LAYER                          │
-│  ┌──────────┐  ┌──────────┐  ┌───────────┐  ┌───────────────────┐  │
-│  │  30 App  │  │ 14 Shared│  │  Design   │  │  Framer Motion    │  │
-│  │  Screens │  │Components│  │  System   │  │  Animations       │  │
-│  └─────┬────┘  └─────┬────┘  │ (Tailwind │  │  + Micro-         │  │
-│        │             │       │  + Radix) │  │  Interactions     │  │
-│        └──────┬──────┘       └───────────┘  └───────────────────┘  │
-│               ▼                                                     │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │              NAVIGATION (In-Memory Stack Router)               │  │
-│  │    pushScreen() · popScreen() · replaceScreen() · goHome()     │  │
-│  └─────────────────────────────┬──────────────────────────────────┘  │
-│                                ▼                                     │
-├──────────────────────────────────────────────────────────────────────┤
-│                            DATA LAYER                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────────┐  │
-│  │  use-supabase│  │ use-realtime │  │  supabase-data.ts          │  │
-│  │  (React      │  │ (WebSocket   │  │  (Repository Pattern       │  │
-│  │   Hooks)     │  │  Channels)   │  │   1,342 lines of CRUD)    │  │
-│  └──────┬───────┘  └──────┬───────┘  └──────────┬─────────────────┘  │
-│         │                 │                     │                     │
-│         └─────────────────┼─────────────────────┘                    │
-│                           ▼                                          │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │                    BOOTSTRAP SYSTEM                             │  │
-│  │  Network Monitor → Session Manager → Guarded Fetch → Ready     │  │
-│  └─────────────────────────────┬──────────────────────────────────┘  │
-├────────────────────────────────┼─────────────────────────────────────┤
-│                                ▼                                     │
-│                       INFRASTRUCTURE                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌─────────┐  │
-│  │   Supabase   │  │  Firebase    │  │  Google Maps  │  │  OTA    │  │
-│  │  (DB, Auth,  │  │  Cloud       │  │  Places API   │  │ Update  │  │
-│  │   Storage,   │  │  Messaging   │  │  Routes API   │  │ Engine  │  │
-│  │   Realtime)  │  │  (FCM Push)  │  │  Nominatim    │  │ (Capgo) │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  └─────────┘  │
-│                                                                      │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │                 CAPACITOR NATIVE BRIDGE                         │  │
-│  │   Geolocation · Push · Local Notifs · App Lifecycle · Storage  │  │
-│  │   ApkUpdater (Custom Plugin) · Google Auth · Browser           │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────┘
+╔══════════════════════════════════════════════════════════════════════╗
+║                        PRESENTATION LAYER                           ║
+║                                                                     ║
+║  ┌─────────────┐  ┌──────────────┐  ┌────────────┐  ┌──────────┐  ║
+║  │  30 Screen  │  │  14 Shared   │  │  Design    │  │  Framer  │  ║
+║  │  Components │  │  Components  │  │  System    │  │  Motion  │  ║
+║  └──────┬──────┘  └──────┬───────┘  │  Tailwind  │  │  Anims   │  ║
+║         └────────┬────────┘         │  + Radix   │  └──────────┘  ║
+║                  ▼                  └────────────┘                 ║
+║  ┌──────────────────────────────────────────────────────────────┐  ║
+║  │          In-Memory Stack Navigator (Custom Router)           │  ║
+║  │     pushScreen · popScreen · replaceScreen · goHome          │  ║
+║  └────────────────────────────┬─────────────────────────────────┘  ║
+╠════════════════════════════════╪═════════════════════════════════════╣
+║                                ▼                                    ║
+║                          DATA LAYER                                 ║
+║                                                                     ║
+║  ┌─────────────┐  ┌──────────────┐  ┌──────────────────────────┐  ║
+║  │use-supabase │  │use-realtime  │  │   supabase-data.ts       │  ║
+║  │(React Hooks)│  │(WS Channels) │  │   Repository Pattern     │  ║
+║  └──────┬──────┘  └──────┬───────┘  │   1,342 lines of CRUD   │  ║
+║         └────────┬────────┘         └────────────┬─────────────┘  ║
+║                  ▼                               ▼                 ║
+║  ┌──────────────────────────────────────────────────────────────┐  ║
+║  │                    BOOTSTRAP SYSTEM                          │  ║
+║  │  NetworkMonitor → SessionManager → GuardedFetch → AppReady  │  ║
+║  └────────────────────────────┬─────────────────────────────────┘  ║
+╠════════════════════════════════╪═════════════════════════════════════╣
+║                                ▼                                    ║
+║                        INFRASTRUCTURE                               ║
+║                                                                     ║
+║  ┌──────────┐  ┌──────────┐  ┌───────────────┐  ┌─────────────┐  ║
+║  │ Supabase │  │ Firebase │  │ Google Maps   │  │ OTA Engine  │  ║
+║  │ Postgres │  │   FCM    │  │ Places API    │  │ (Capgo +    │  ║
+║  │ Auth     │  │  Push    │  │ Routes API v2 │  │  ApkUpdater)│  ║
+║  │ Storage  │  │  Notifs  │  │ Nominatim     │  │             │  ║
+║  │ Realtime │  │          │  │ OSRM fallback │  │             │  ║
+║  └──────────┘  └──────────┘  └───────────────┘  └─────────────┘  ║
+║                                                                     ║
+║  ┌──────────────────────────────────────────────────────────────┐  ║
+║  │                  CAPACITOR NATIVE BRIDGE                     │  ║
+║  │  Geolocation · Push · LocalNotifs · AppLifecycle · Storage   │  ║
+║  │  ApkUpdater (Custom Plugin) · GoogleAuth · InAppBrowser      │  ║
+║  └──────────────────────────────────────────────────────────────┘  ║
+╚══════════════════════════════════════════════════════════════════════╝
 ```
 
-### Key Architectural Decisions
+### Architectural Decisions
 
-| Decision | Choice | Why |
-|----------|--------|-----|
-| **Rendering** | Next.js Static Export (`output: "export"`) | No server needed — ships as pure HTML/JS/CSS inside Capacitor |
-| **Navigation** | Custom in-memory stack | Future-proof for React Navigation migration; no URL routing needed in a native shell |
-| **Data layer** | Repository pattern with guard wrappers | Single source of truth; prevents unauthenticated/offline queries at the function level |
-| **State** | React Context + module-level caches | Lightweight; no Redux overhead for a mobile-first app |
-| **Realtime** | Supabase Postgres Changes | Eliminates polling; sub-second updates for match slots, notifications, invites |
-| **Updates** | OTA (Capgo) + Custom APK Updater | Ship JS fixes in minutes; ship native changes via APK self-update |
-| **Maps** | Google Places (New) + Routes v2 + Leaflet fallback | Best discovery quality; Leaflet as cost-saving offline fallback |
-
----
-
-## 📊 By the Numbers
-
-| Metric | Value |
-|--------|-------|
-| **Total TypeScript files** | 152 |
-| **Lines of application code** | 22,143 |
-| **App screens** | 30 |
-| **Reusable UI components** | 14 custom + 30 Radix primitives |
-| **Supabase tables** | 6+ (players, matches, match_players, notifications, chat, app_versions) |
-| **Realtime channels** | 5 (matches, match_players, notifications, invites, badge count) |
-| **API integrations** | 4 (Supabase, Google Places, Google Routes, Nominatim/OSRM) |
-| **Notification channels** | 5 Android channels with priority tiers |
-| **OTA modules** | 11 files covering full update lifecycle |
-| **Bootstrap stages** | 5 deterministic phases |
-| **Domain types** | 28 TypeScript interfaces |
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| **Rendering** | Next.js Static Export | Zero server cost — pure HTML/JS/CSS inside Capacitor shell |
+| **Navigation** | Custom in-memory stack | Future-compatible with React Navigation; no URL routing needed |
+| **Data layer** | Repository pattern + guard wrappers | Prevents unauthenticated / offline queries at the call site |
+| **State** | React Context + module-level caches | No Redux overhead for a focused mobile app |
+| **Realtime** | Supabase Postgres Changes | < 500ms updates; eliminates all polling |
+| **Updates** | Capgo OTA + Custom APK Updater | JS hotfixes in minutes; native changes via silent APK self-update |
+| **Maps** | Google Places (New) + Routes v2 + Leaflet | Best discovery quality with open-source cost-saving fallback |
 
 ---
 
@@ -276,38 +333,41 @@ Photos (from Google), ratings, distance, price, slot availability, one-tap call,
 
 <table>
 <tr>
-<td width="50%">
+<td valign="top" width="50%">
 
 ### Frontend
-| Technology | Purpose |
-|-----------|---------|
-| **Next.js 16** | Framework (Static Export mode) |
-| **React 19** | UI runtime |
-| **TypeScript 5.7** | Type safety |
-| **Tailwind CSS 4** | Utility-first styling |
-| **Radix UI** | 20+ accessible primitives |
-| **Framer Motion** | Physics-based animations |
-| **Lucide React** | Icon system (560+ icons) |
-| **Recharts** | Data visualization |
-| **Leaflet** | Open-source map rendering |
-| **React Hook Form + Zod** | Form validation |
+
+| Library | Version | Role |
+|---------|---------|------|
+| **Next.js** | 16 | Framework — static export mode |
+| **React** | 19 | UI runtime |
+| **TypeScript** | 5.7 | Full type safety |
+| **Tailwind CSS** | 4 | Utility-first styling |
+| **Radix UI** | latest | 20+ accessible primitives |
+| **Framer Motion** | latest | Physics-based animations |
+| **Lucide React** | latest | 560+ icon system |
+| **Recharts** | latest | Data visualization |
+| **Leaflet** | latest | Open-source map rendering |
+| **React Hook Form** | latest | Performant forms |
+| **Zod** | latest | Runtime schema validation |
 
 </td>
-<td width="50%">
+<td valign="top" width="50%">
 
 ### Backend & Infrastructure
-| Technology | Purpose |
-|-----------|---------|
-| **Supabase** | Database, Auth, Storage, Realtime |
-| **Firebase (FCM)** | Push notifications |
-| **Google Places API** | Turf discovery |
+
+| Service | Role |
+|---------|------|
+| **Supabase** | Postgres, Auth, Storage, Realtime |
+| **Firebase FCM** | Push notifications |
+| **Google Places API (New)** | Turf discovery |
 | **Google Routes API v2** | Navigation & directions |
 | **Nominatim** | Reverse geocoding |
-| **OSRM** | Fallback routing engine |
-| **Capacitor 8** | Native bridge (Android) |
-| **Capgo Updater** | OTA bundle delivery |
+| **OSRM** | Fallback open-source routing |
+| **Capacitor 8** | Native Android bridge |
+| **Capgo** | OTA bundle delivery |
 | **GitHub Actions** | CI/CD pipeline |
-| **Vercel** | Web hosting & analytics |
+| **Vercel** | Web hosting & edge analytics |
 
 </td>
 </tr>
@@ -315,45 +375,83 @@ Photos (from Google), ratings, distance, price, slot availability, one-tap call,
 
 ---
 
-## 📱 App Screens
+## 🗂️ Project Structure
 
-<details>
-<summary><strong>Click to expand — 30 production screens</strong></summary>
-
-| # | Screen | Description |
-|---|--------|-------------|
-| 1 | **Splash** | Branded loading with boot diagnostics |
-| 2 | **Onboarding** | Feature carousel for first-time users |
-| 3 | **Auth Flow** | Google Sign-In + OTP with profile setup |
-| 4 | **Home** | Match feed, quick actions, live matches, nearby turfs |
-| 5 | **Grounds Hub** | Turf discovery with filters (price, distance, type, rating) |
-| 6 | **Ground Detail** | Venue info, photos, amenities, slots, call/navigate actions |
-| 7 | **Turf Map** | Interactive Leaflet map with clustered turf pins |
-| 8 | **Live Navigation** | Turn-by-turn directions with Google Routes polyline overlay |
-| 9 | **Match Detail** | Full match info, squad list, join/request actions, share card |
-| 10 | **Create Match** | Multi-step match creation with ground picker, rules, pricing |
-| 11 | **My Matches** | Tabbed view: Created / Joined / Pending / History / Invites |
-| 12 | **Your Matches** | Quick-access match management |
-| 13 | **Manage Requests** | Accept/decline join requests with player profiles |
-| 14 | **Players** | Player discovery with skill/availability/distance filters |
-| 15 | **Player Profile** | Career stats, recent form, reliability, badge, contact |
-| 16 | **Profile** | Self-profile editing (name, avatar, city, zone, phone, role) |
-| 17 | **Notifications** | Categorized alerts with read/unread state and realtime badge |
-| 18 | **Chat Inbox** | Match chat threads with unread counters |
-| 19 | **Chat Room** | In-match messaging with system messages |
-| 20 | **Tournaments** | Tournament browser with status filters |
-| 21 | **Tournament Detail** | Rules, schedule, entry fee, team count, registration |
-| 22 | **Tournament Bracket** | Interactive QF → SF → Final bracket visualization |
-| 23 | **Team Registration** | Squad signup for tournaments |
-| 24 | **Live Scorecard** | Ball-by-ball scoring with batter/bowler stats |
-| 25 | **Score Entry** | Ball-by-ball input for organizers |
-| 26 | **Share Card** | Shareable match invite card generation |
-| 27 | **Availability Card** | Player availability status display |
-| 28 | **Filter Sheet** | Advanced multi-criteria filter bottom sheet |
-| 29 | **Offline Screen** | Graceful offline state with retry |
-| 30 | **Location Denied** | Permission request flow for location access |
-
-</details>
+```
+turfmatch/
+│
+├── app/                              # Next.js App Router
+│   ├── layout.tsx                    # Root layout — fonts, viewport, metadata
+│   ├── page.tsx                      # Entry point → mounts AppShell
+│   └── globals.css                   # Design tokens + keyframe animations
+│
+├── components/
+│   ├── screens/                      # 30 full-page screen components
+│   │   ├── home-screen.tsx
+│   │   ├── grounds-hub-screen.tsx    # Turf discovery + scoring engine
+│   │   ├── match-detail-screen.tsx
+│   │   ├── create-match-screen.tsx
+│   │   ├── live-scorecard-screen.tsx
+│   │   ├── turf-map-screen.tsx
+│   │   ├── live-navigation-screen.tsx
+│   │   └── … 23 more
+│   │
+│   ├── turfmatch/                    # Shared UI components
+│   │   ├── app-shell.tsx             # Root shell + screen router
+│   │   ├── tm-bottom-nav.tsx         # 5-tab navigation bar
+│   │   ├── tm-bottom-sheet.tsx       # Draggable bottom sheet
+│   │   ├── match-card.tsx
+│   │   ├── filter-sheet.tsx
+│   │   └── phone-gate.tsx            # Privacy-gated number reveal
+│   │
+│   └── ui/                           # shadcn/ui (Radix primitives)
+│
+├── lib/
+│   ├── bootstrap/                    # 🛡️ 5-stage startup orchestration
+│   │   ├── app-bootstrap.tsx         # Deterministic boot sequencer
+│   │   ├── session-manager.ts        # Auth hydration + localStorage persist
+│   │   ├── network-monitor.ts        # Online/offline state + event bus
+│   │   ├── guarded-fetch.ts          # Auth-gated API call wrapper
+│   │   └── startup-logger.ts         # Full boot timeline diagnostics
+│   │
+│   ├── turfmatch/                    # 🏏 Core business logic
+│   │   ├── supabase-data.ts          # Repository layer  (1,342 lines)
+│   │   ├── use-supabase.ts           # React hooks bridge (794 lines)
+│   │   ├── use-realtime.ts           # Supabase WS subscriptions
+│   │   ├── google-maps.ts            # Places + Routes API client
+│   │   ├── location-store.tsx        # Geolocation context provider
+│   │   ├── navigation.tsx            # In-memory stack router
+│   │   ├── types.ts                  # 28 domain TypeScript interfaces
+│   │   └── data.ts                   # Seed / mock data
+│   │
+│   ├── notifications/                # 🔔 Push notification engine
+│   │   ├── notification-service.ts   # Orchestrator          (366 lines)
+│   │   ├── deduplication.ts          # TTL-based event dedup
+│   │   ├── deep-link.ts              # Notification URL → screen
+│   │   ├── engagement.ts             # Delivery analytics
+│   │   ├── permission.ts             # Permission flow management
+│   │   └── push-token.ts             # FCM token registration + sync
+│   │
+│   ├── ota/                          # 📦 Over-the-air update system
+│   │   ├── update-manager.ts         # Version check + download orchestrator
+│   │   ├── apk-updater.ts            # Native APK Capacitor plugin bridge
+│   │   ├── rollback-manager.ts       # Safe revert on consecutive failure
+│   │   ├── version-utils.ts          # Semver comparison helpers
+│   │   ├── device-state.ts           # State machine (idle/downloading/failed)
+│   │   └── analytics.ts              # Update event tracking
+│   │
+│   ├── auth-context.tsx              # Auth state + player profile management
+│   └── supabase.ts                   # Supabase singleton client
+│
+├── supabase/
+│   └── migrations/                   # Versioned database schema migrations
+│
+├── android/                          # Capacitor Android native project
+├── .github/
+│   └── workflows/
+│       └── ota-deploy.yml            # Automated OTA CI/CD pipeline
+└── public/                           # Static assets, icons, splash screens
+```
 
 ---
 
@@ -361,325 +459,399 @@ Photos (from Google), ratings, distance, price, slot availability, one-tap call,
 
 ### Prerequisites
 
-- **Node.js** ≥ 20
-- **npm** or **pnpm**
-- **Android Studio** (for native builds)
-- **Supabase** project (free tier works)
+| Requirement | Version |
+|-------------|---------|
+| Node.js | ≥ 20 |
+| npm / pnpm | latest |
+| Android Studio | latest stable (for native builds) |
+| Supabase project | free tier works |
 
-### 1. Clone & Install
+### 1 — Clone & install
 
 ```bash
-git clone https://github.com/your-org/turf-match.git
-cd turf-match
-npm install
+git clone https://github.com/Devanshupardeshi/turfmatch.git
+cd turfmatch
+npm install       # or: pnpm install
 ```
 
-### 2. Configure Environment
+### 2 — Configure environment
 
-Create `.env.local`:
+Create `.env.local` in the project root (see [Environment Variables](#-environment-variables)):
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-google-maps-key
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-oauth-client-id
+```bash
+cp .env.example .env.local
+# then fill in your keys
 ```
 
-### 3. Run Development Server
+### 3 — Run the dev server
 
 ```bash
 npm run dev
-# App runs at http://localhost:3000
+# http://localhost:3000
 ```
 
-### 4. Build for Android
+### 4 — Build & run on Android
 
 ```bash
-npm run build                    # Next.js static export
-npx cap sync android             # Sync web assets to native
-npx cap open android             # Open in Android Studio
-# Build → Run on emulator/device
+npm run build           # Next.js static export → /out
+npx cap sync android    # Copy web assets into the Android project
+npx cap open android    # Open Android Studio
+# Then: Run → select device / emulator
 ```
 
-### 5. Deploy OTA Update
+### 5 — Deploy an OTA update
 
 ```bash
 git push origin main
 # GitHub Actions automatically:
-# 1. Builds the bundle
-# 2. Computes SHA-256 checksum
-# 3. Uploads to Supabase Storage
-# 4. Inserts version record
-# 5. Devices auto-update on next app launch
+#   1. npm run build
+#   2. zip the bundle
+#   3. SHA-256 checksum
+#   4. Upload to Supabase Storage
+#   5. Insert version record
+#   ✓  Devices hot-swap the code on next launch
 ```
 
 ---
 
-## 🗂️ Project Structure
+## 🔑 Environment Variables
 
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase anon (public) key |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | ✅ | Google Maps + Places + Routes |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | ✅ | Google OAuth client ID (for Sign-In) |
+| `SUPABASE_SERVICE_ROLE_KEY` | ⚠️ CI only | Used in GitHub Actions & Admin — never expose client-side |
+
+---
+
+## 🗄️ Database Schema
+
+```sql
+-- Core tables (Supabase / Postgres)
+
+players              -- profile, stats, zone, badge, reliability_score, push_token
+matches              -- sport, location, datetime, skill_level, slots, status
+match_players        -- join table: player ↔ match, role, join_status
+notifications        -- type, payload, read, delivered, deep_link_url
+chat_messages        -- match_id, sender_id, content, message_type
+app_versions         -- version, channel, bundle_url, checksum, rollout_pct, status
+apk_install_attempts -- version_id, device_id, outcome (installed/failed/downloading)
+device_update_state  -- device_id, current_version, last_check_at, update_status
 ```
-turf-match-app-build/
-├── app/                          # Next.js App Router
-│   ├── layout.tsx                # Root layout (fonts, metadata, viewport)
-│   ├── page.tsx                  # Entry point → mounts AppShell
-│   └── globals.css               # Design system tokens + animations
-│
-├── components/
-│   ├── screens/                  # 30 full-page screen components
-│   │   ├── home-screen.tsx       # Main feed with match cards
-│   │   ├── match-detail-screen.tsx # Match info + squad management
-│   │   ├── create-match-screen.tsx # Multi-step match creation
-│   │   ├── grounds-hub-screen.tsx  # Turf discovery + filters
-│   │   ├── live-scorecard-screen.tsx # Ball-by-ball scoring
-│   │   ├── turf-map-screen.tsx   # Interactive map view
-│   │   └── ...28 more screens
-│   │
-│   ├── turfmatch/                # Shared UI components
-│   │   ├── app-shell.tsx         # Root shell + screen router
-│   │   ├── tm-bottom-nav.tsx     # 5-tab navigation bar
-│   │   ├── tm-bottom-sheet.tsx   # Draggable bottom sheet
-│   │   ├── match-card.tsx        # Match preview card
-│   │   ├── filter-sheet.tsx      # Advanced filter panel
-│   │   └── phone-gate.tsx        # Privacy-gated phone input
-│   │
-│   └── ui/                       # Radix UI primitives (shadcn/ui)
-│
-├── lib/
-│   ├── bootstrap/                # 🛡️ Startup orchestration
-│   │   ├── app-bootstrap.tsx     # 5-stage deterministic boot
-│   │   ├── session-manager.ts    # Auth hydration + persistence
-│   │   ├── network-monitor.ts    # Online/offline detection
-│   │   ├── guarded-fetch.ts      # Auth-gated API wrapper
-│   │   └── startup-logger.ts     # Boot diagnostics
-│   │
-│   ├── turfmatch/                # 🏏 Core business logic
-│   │   ├── supabase-data.ts      # Repository layer (1,342 lines)
-│   │   ├── use-supabase.ts       # React hooks bridge (794 lines)
-│   │   ├── use-realtime.ts       # WebSocket subscriptions
-│   │   ├── google-maps.ts        # Places + Routes API client
-│   │   ├── location-store.tsx    # Geolocation provider
-│   │   ├── navigation.tsx        # In-memory stack router
-│   │   ├── types.ts              # 28 domain interfaces
-│   │   └── data.ts               # Seed/mock data
-│   │
-│   ├── notifications/            # 🔔 Push notification engine
-│   │   ├── notification-service.ts # Orchestrator (366 lines)
-│   │   ├── deduplication.ts      # TTL-based event dedup
-│   │   ├── deep-link.ts          # URL → screen routing
-│   │   ├── engagement.ts         # Delivery analytics
-│   │   ├── permission.ts         # Permission flow management
-│   │   └── push-token.ts         # FCM token sync
-│   │
-│   ├── ota/                      # 📦 Over-the-Air updates
-│   │   ├── update-manager.ts     # Version check + download
-│   │   ├── apk-updater.ts        # Native APK bridge
-│   │   ├── rollback-manager.ts   # Safe revert on failure
-│   │   ├── version-utils.ts      # Semver comparison
-│   │   ├── device-state.ts       # State machine persistence
-│   │   └── analytics.ts          # Update event tracking
-│   │
-│   ├── auth-context.tsx          # Auth state + profile management
-│   └── supabase.ts               # Supabase client singleton
-│
-├── supabase/migrations/          # Database schema migrations
-├── android/                      # Capacitor Android project
-├── .github/workflows/            # CI/CD pipelines
-│   └── ota-deploy.yml            # Automated OTA deployment
-└── public/                       # Static assets + icons
-```
+
+All tables are protected by **Row-Level Security (RLS)** policies.
+Migrations live in `supabase/migrations/`.
 
 ---
 
 ## 🔐 Security & Privacy
 
-| Feature | Implementation |
-|---------|---------------|
-| **Row-Level Security (RLS)** | Supabase RLS policies on all tables — users can only read/write their own data |
-| **Phone Privacy Gate** | Phone numbers revealed ONLY to confirmed squad members during match window |
-| **Auth Guard** | `guardedFetch()` wrapper prevents all API calls before auth confirmation |
-| **Token Rotation** | Supabase handles JWT refresh automatically |
-| **API Key Scoping** | Client-side uses anon key (read-only); service key restricted to CI/CD |
-| **Checksum Verification** | OTA bundles validated via SHA-256 before installation |
-| **Input Validation** | Zod schemas on all form inputs |
-| **Install Permissions** | Android `REQUEST_INSTALL_PACKAGES` permission flow for APK updates |
-
----
-
-## 📈 Business Model & Market
-
-### Market Opportunity
-
-| Metric | Value |
-|--------|-------|
-| **TAM** (Total Addressable Market) | ₹15,000 Cr ($1.8B) — Indian recreational sports |
-| **SAM** (Serviceable) | ₹3,000 Cr ($360M) — Urban box cricket + turf bookings |
-| **SOM** (Obtainable Year 1) | ₹50 Cr ($6M) — Pune + Mumbai metro |
-| **Target users** | 30M+ recreational cricketers in India |
-| **Turfs in India** | 50,000+ and growing 25% YoY |
-
-### Revenue Streams
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  💰 REVENUE MODEL                                           │
-│                                                             │
-│  1. 🎫 Match Fees         Platform commission on per-player │
-│                           pricing (5-10% per transaction)   │
-│                                                             │
-│  2. 🏟️ Turf Partnerships  Featured listings, premium        │
-│                           placement, booking commissions    │
-│                                                             │
-│  3. 🏆 Tournament Hosting  Entry fee commission + sponsored │
-│                           tournaments with prize pools      │
-│                                                             │
-│  4. ⭐ Player Premium     Priority matching, advanced stats,│
-│                           badge boosts, profile highlights  │
-│                                                             │
-│  5. 📊 Data Insights      Anonymized sports analytics for   │
-│                           brands, equipment makers, turfs   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Competitive Advantage
-
-| Competitor | What They Do | What We Do Better |
-|-----------|-------------|-------------------|
-| **Playo** | Match listing (manual) | Real-time matchmaking + live scoring + navigation |
-| **Hudle** | Venue booking only | End-to-end: discover → match → navigate → play → score |
-| **SportVot** | Live streaming | We focus on grassroots: getting you on the ground playing |
-| **WhatsApp Groups** | Chaos | Structured matchmaking with reliability scores |
+| Feature | How it works |
+|---------|-------------|
+| **Row-Level Security** | Supabase RLS on every table — users read/write only their own rows |
+| **Phone Privacy Gate** | Numbers visible only to confirmed squad during the active match window |
+| **Auth Guard** | `guardedFetch()` wrapper — zero API calls until auth state is confirmed |
+| **JWT Rotation** | Handled automatically by Supabase |
+| **API Key Scoping** | `anon` key client-side (read-only RLS); `service_role` key only in CI/Admin |
+| **OTA Integrity** | SHA-256 checksum verified before every bundle install |
+| **APK Signing Verification** | Optional signing fingerprint pinning to prevent tampered APKs |
+| **Form Validation** | Zod schemas on all inputs — client and server side |
+| **Install Permissions** | `REQUEST_INSTALL_PACKAGES` flow surfaced with clear UI for APK updates |
 
 ---
 
 ## 🧪 Engineering Highlights
 
-### 1. Race-Condition-Free Bootstrap
-The app uses a **deterministic 5-stage boot sequence** that solves the #1 problem with Capacitor apps: startup race conditions.
+### 1 · Race-Condition-Free Bootstrap
+
+The single biggest issue with Capacitor apps is startup race conditions — auth not ready, DB calls firing blind. TurfMatch solves this with a strict 5-stage sequence:
 
 ```typescript
-// Boot phases execute in strict order:
-NETWORK_READY → AUTH_HYDRATED → QUERY_READY → LOCATION_RESOLVED → APP_READY
+// lib/bootstrap/app-bootstrap.tsx
+enum BootStage {
+  IDLE              = 0,
+  NETWORK_READY     = 1,  // navigator.onLine + connection listener attached
+  AUTH_HYDRATED     = 2,  // Supabase session restored from localStorage
+  QUERY_READY       = 3,  // guardedFetch unlocked
+  LOCATION_RESOLVED = 4,  // Capacitor GPS or browser fallback complete
+  APP_READY         = 5,  // UI unlocks — render home screen
+}
 
-// Each phase gates the next — impossible for a query to fire before auth
+// Stage N cannot start until Stage N-1 resolves.
+// Hard timeout: no stage may block > 8 seconds (force-resolves with safe fallback).
 ```
 
-### 2. Realtime Without Polling
-Every data hook uses **Supabase Realtime channels** instead of polling:
+### 2 · Realtime Without Any Polling
 
 ```typescript
-// Match slots update across all devices in <500ms
-useRealtimeMatches(onEvent)        // matches table
-useRealtimeMatchPlayers(matchId)   // match_players table
-useRealtimeNotifications(userId)   // notifications table
-useRealtimeMyInvites(userId)       // invite changes
+// lib/turfmatch/use-realtime.ts
+// All five realtime channels — sub-500ms latency across devices
+
+useRealtimeMatches(onEvent)         // matches table changes
+useRealtimeMatchPlayers(matchId)    // slot fills / departures
+useRealtimeNotifications(userId)    // instant alert delivery
+useRealtimeMyInvites(userId)        // invite accept / decline
+useRealtimeBadgeCount(userId)       // notification badge counter
 ```
 
-### 3. Intelligent Turf Relevance Scoring
-We built a custom **ML-free relevance engine** that scores Google Places results:
+Each channel gets a **UUID-scoped name** to prevent collision when multiple instances run.
+
+### 3 · ML-Free Turf Relevance Engine
 
 ```typescript
-// Score = keyword matches (×25) + address matches (×5) + sports type bonus (×15)
-// Hard-reject: 40+ blocked Google types (restaurants, hotels, banks, etc.)
-// Hard-require: At least one turf keyword OR one sports Google type
+// lib/turfmatch/google-maps.ts
+
+function scoreTurfResult(place: GooglePlace): number {
+  let score = 0;
+
+  // Name keyword matches: "turf", "cricket", "ground", "box", "court", "futsal"
+  for (const keyword of TURF_KEYWORDS) {
+    if (place.displayName.text.toLowerCase().includes(keyword)) score += 25;
+  }
+  // Address keyword matches
+  for (const keyword of ADDRESS_KEYWORDS) {
+    if (place.formattedAddress?.toLowerCase().includes(keyword)) score += 5;
+  }
+  // Google places type bonus: "sports_complex", "stadium", "sports_activity_location"
+  for (const type of place.types ?? []) {
+    if (SPORTS_TYPES.has(type)) score += 15;
+  }
+  // Hard-reject if zero signal
+  return score;
+}
+
+// 40+ blocked types: restaurant, bank, hospital, temple, car_dealer, lodging …
 ```
 
-### 4. Graceful Degradation Stack
+### 4 · Graceful Degradation Stack
+
 ```
-Google Routes API  →  fails?  →  OSRM Open Source Router
-Capacitor GPS      →  fails?  →  Browser Geolocation API
-Supabase query     →  times out (10s)?  →  Return fallback + retry with backoff
-Loading state      →  stuck > 8s?  →  Force-resolve to prevent infinite spinners
+Google Routes API v2   ──fails?──▶  OSRM (open-source routing)
+Capacitor GPS          ──fails?──▶  Browser Geolocation API
+                                         └──fails?──▶  Default to Pune
+Supabase query         ──timeout 10s──▶  Return cached + schedule retry
+Loading state          ──stuck > 8s──▶  Force-resolve (never infinite spinner)
+OTA download           ──3 failures──▶  Auto-rollback to last stable bundle
 ```
 
-### 5. Zero-Downtime OTA Pipeline
+### 5 · Full OTA Pipeline (Admin → Device)
+
 ```
-git push main  →  GitHub Actions  →  Next.js build  →  zip + SHA-256
-                                  →  Upload to Supabase Storage
-                                  →  Insert version record (channel, rollout %)
-                                  →  Devices auto-update on next launch
-                                  →  Rollback if 3 consecutive failures detected
+Admin Dashboard: Upload signed APK
+      │
+      ├─▶  Client-side SHA-256 hash
+      ├─▶  POST /api/admin/apk/sign-upload → creates draft + signed URL
+      ├─▶  XHR PUT direct to Supabase Storage (progress bar, KB/s, ETA)
+      ├─▶  POST /api/admin/apk/finalize → activates, archives prior version
+      │
+Device on next launch:
+      ├─▶  GET /api/version.json?versionCode=X&channel=stable&deviceId=Y
+      ├─▶  Server: versionCode comparison + SDK check + staged rollout hash
+      ├─▶  Download APK → verify SHA-256 → trigger Android install
+      └─▶  3 consecutive failures → auto-rollback to last stable
 ```
 
 ---
 
-## 🎨 Design Language
+## 🎨 Design System
 
-| Element | Specification |
-|---------|--------------|
-| **Color Palette** | Deep Navy (`#0c1324`) + Mint Primary (`#4edea3`) + Amber Secondary (`#ffb95f`) |
-| **Surface Elevation** | 7-level elevation ladder (lowest → low → surface → container → high → highest → bright) |
-| **Typography** | Lexend (body) + Anton (display headings) |
-| **Corners** | 0.75rem base radius |
-| **Animations** | Custom keyframes: `fade-in`, `slide-up`, `pulse-glow`, `screen-enter` |
-| **Interaction** | Press feedback (scale 0.97 + opacity 0.85), card lift effect |
-| **Accessibility** | `prefers-reduced-motion` media query support, semantic HTML |
-| **Performance** | `content-visibility: auto`, GPU-accelerated transforms, lazy image loading |
-| **Dark Mode** | Dark-first design — the entire app is built for dark backgrounds |
+| Token | Value |
+|-------|-------|
+| **Primary** | `#4edea3` — Mint green |
+| **Secondary** | `#ffb95f` — Warm amber |
+| **Background** | `#0c1324` — Deep navy |
+| **Surface levels** | 7-tier elevation ladder: `lowest` → `low` → `surface` → `container` → `high` → `highest` → `bright` |
+| **Body font** | Lexend (variable) |
+| **Display font** | Anton (headings) |
+| **Border radius** | `0.75rem` base |
+| **Motion** | `fade-in`, `slide-up`, `pulse-glow`, `screen-enter` keyframes |
+| **Press feedback** | `scale(0.97)` + `opacity(0.85)` on tap |
+| **Theme** | Dark-first — entire UI designed for dark backgrounds |
+| **Accessibility** | `prefers-reduced-motion` respected; semantic HTML throughout |
+| **Performance** | `content-visibility: auto`; GPU-accelerated transforms; lazy image loading |
+
+---
+
+## 📊 By the Numbers
+
+<div align="center">
+
+| Metric | Value |
+|--------|-------|
+| TypeScript source files | **152** |
+| Lines of application code | **22,143** |
+| App screens | **30** |
+| Reusable UI components | **14 custom + 30 Radix** |
+| Supabase tables | **8** |
+| Realtime channels | **5** |
+| External API integrations | **4** |
+| Android notification channels | **5** |
+| OTA system modules | **11** |
+| Bootstrap stages | **5** |
+| Domain TypeScript interfaces | **28** |
+
+</div>
+
+---
+
+## 📈 Business Model
+
+### Market Size
+
+| Tier | Value | Scope |
+|------|-------|-------|
+| **TAM** | ₹15,000 Cr (~$1.8B) | Indian recreational sports |
+| **SAM** | ₹3,000 Cr (~$360M) | Urban box cricket + turf bookings |
+| **SOM (Year 1)** | ₹50 Cr (~$6M) | Pune + Mumbai metro launch |
+
+**30M+** recreational cricketers · **50,000+** turfs · growing **25% YoY**
+
+### Revenue Streams
+
+| Stream | Mechanism |
+|--------|-----------|
+| 🎫 **Match Fees** | 5–10% platform commission per player transaction |
+| 🏟️ **Turf Partnerships** | Featured listings, premium placement, booking commissions |
+| 🏆 **Tournament Hosting** | Entry fee share + sponsored tournaments with prize pools |
+| ⭐ **Player Premium** | Priority matching, advanced stats, badge boosts |
+| 📊 **Data Insights** | Anonymized sports analytics for brands & equipment makers |
+
+### Competitive Landscape
+
+| Competitor | Their Scope | TurfMatch Advantage |
+|-----------|-------------|---------------------|
+| **Playo** | Manual match listings | Real-time matchmaking + live scoring + navigation |
+| **Hudle** | Venue booking only | Full loop: discover → match → navigate → play → score |
+| **SportVot** | Live streaming | Grassroots focus — getting people on the ground |
+| **WhatsApp Groups** | Unstructured chaos | Reliability scores, skill filters, structured workflows |
 
 ---
 
 ## 🗺️ Roadmap
 
-| Phase | Timeline | Features |
-|-------|----------|----------|
-| ✅ **v1.0 — MVP** | Complete | Matchmaking, turf discovery, navigation, profiles, notifications, OTA |
-| 🔄 **v1.1 — Social** | Q3 2026 | Friend system, team creation, match history leaderboards |
-| 📅 **v1.2 — Payments** | Q3 2026 | UPI integration, in-app payment collection, split bills |
-| 🤖 **v2.0 — AI** | Q4 2026 | ML-powered player recommendations, optimal time/venue suggestions |
-| 🍎 **v2.1 — iOS** | Q1 2027 | iOS build with Capacitor (same codebase) |
-| ⚽ **v3.0 — Multi-sport** | Q2 2027 | Football, badminton, basketball, tennis |
+| Version | ETA | Theme | Highlights |
+|---------|-----|-------|-----------|
+| ✅ v1.0 | **Shipped** | MVP | Matchmaking, turf discovery, navigation, notifications, OTA |
+| 🔄 v1.1 | Q3 2026 | Social | Friend system, team creation, leaderboards |
+| 📅 v1.2 | Q3 2026 | Payments | UPI integration, in-app split billing |
+| 🤖 v2.0 | Q4 2026 | AI | ML player recommendations, smart venue/time suggestions |
+| 🍎 v2.1 | Q1 2027 | iOS | `npx cap add ios` — same codebase, new platform |
+| ⚽ v3.0 | Q2 2027 | Multi-sport | Football, badminton, basketball, tennis |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+```bash
+# 1. Fork the repo and clone your fork
+git clone https://github.com/<your-username>/turfmatch.git
+
+# 2. Create a feature branch
+git checkout -b feat/your-feature-name
+
+# 3. Make your changes, then commit
+git commit -m "feat: describe what you did"
+
+# 4. Push and open a Pull Request
+git push origin feat/your-feature-name
+```
+
+**Before submitting:**
+- Run `npm run build` — the static export must succeed
+- Keep TypeScript strict — no `any` without a comment explaining why
+- Match the existing code style (Prettier + ESLint config included)
+- Update this README if you add a new screen, feature, or env variable
+
+For larger changes, open an issue first to discuss the approach.
 
 ---
 
 ## ❓ FAQ
 
-**"Is this actually live or just a hackathon prototype?"**
+<details>
+<summary><strong>Is this actually live, or is it a hackathon prototype?</strong></summary>
 
-It's live. Download it from [www.turfmatch.app](https://www.turfmatch.app) right now on any Android phone. We have OTA updates running, push notifications working, real Google Maps turf discovery — the whole thing. This isn't a Figma mockup.
+It's live. Download the APK from [turfmatch.app](https://www.turfmatch.app) on any Android phone right now. OTA updates are running, push notifications work, Google Maps turf discovery is real. This is not a Figma mockup.
 
-**"How do you find turfs? Is it a static database?"**
+</details>
 
-No static database. We hit the Google Places API (New) in real-time, fire 4 parallel searches, score every result with our own relevance engine, filter out the junk (Google loves returning restaurants and hotels), and show you actual turfs sorted by distance. Every time you open the app, you get fresh results based on where you are right now.
+<details>
+<summary><strong>How does turf discovery work — is it a static database?</strong></summary>
 
-**"What happens if I'm offline or have bad network?"**
+No static database. We call the Google Places API (New) in real time, fire 4 parallel searches, run every result through our custom relevance scoring engine, reject the noise (restaurants, banks, etc.), and return actual turfs sorted by your live GPS distance. Fresh results every time you open the app.
 
-The app doesn't crash or hang. We have a full offline resilience stack — cached data survives across tabs and app restarts, every API call has a 10-second hard timeout, failed requests retry 3 times with exponential backoff, and there's a loading safety net that force-resolves after 8 seconds so you're never stuck on a spinner. If you're completely offline, you see a clean offline banner with a retry button.
+</details>
 
-**"Do you have your own backend server?"**
+<details>
+<summary><strong>What happens when I'm offline or on a flaky connection?</strong></summary>
 
-No. Zero server cost. The app is a Next.js static export (pure HTML/JS/CSS) wrapped in Capacitor for Android. All the backend — database, auth, file storage, realtime WebSockets — is Supabase. Push notifications go through Firebase Cloud Messaging. This means we can serve thousands of users on Supabase's free tier before we ever need to pay for infrastructure.
+The app does not crash or freeze. Cached data persists across tab switches and restarts. Every API call has a 10-second hard timeout. Failures retry 3 times with exponential backoff. Any loading state that hasn't resolved in 8 seconds force-resolves with a fallback. If you're fully offline, you see a clean banner with a retry button.
 
-**"How do OTA updates work?"**
+</details>
 
-When we push code to `main`, a GitHub Actions workflow automatically builds the Next.js bundle, zips it, computes a SHA-256 checksum, uploads it to Supabase Storage, and inserts a version record. Next time any user opens the app, it checks for updates, downloads the new bundle, verifies the checksum, and hot-swaps the code. No app store review needed. If something goes wrong, it auto-rolls back after 3 consecutive failures.
+<details>
+<summary><strong>Do you run your own backend server?</strong></summary>
 
-**"Why not React Native or Flutter?"**
+No. Zero server cost. The app is a Next.js static export (HTML/JS/CSS) inside a Capacitor Android shell. All backend — database, auth, storage, realtime WebSockets — is Supabase. Push notifications go through Firebase Cloud Messaging. We can serve thousands of users on Supabase's free tier before incurring any infrastructure cost.
 
-Because we wanted to move fast with a web tech stack we already knew (React/Next.js) and still ship a native Android app. Capacitor gives us native APIs (GPS, push, filesystem) while letting us write everything in TypeScript. When we're ready for iOS, we just run `npx cap add ios` — same codebase, no rewrite.
+</details>
 
-**"Can I use this for football / badminton / other sports?"**
+<details>
+<summary><strong>How do OTA updates work exactly?</strong></summary>
 
-Not yet, but it's coming. The turf search already discovers football turfs and futsal courts. The data model supports a `sportType` field on matches. Multi-sport support is on the v3.0 roadmap.
+An admin uploads a signed APK via our admin dashboard. The system computes SHA-256, uploads directly to Supabase Storage via signed URL, and inserts a version record with channel, rollout %, and mandatory flag. When a user opens the app, it calls `/api/version.json` — the server checks versionCode, SDK compatibility, and staged rollout eligibility. If eligible, the app downloads, verifies the checksum, and installs. If 3 consecutive devices report failures, it auto-rolls back.
 
-**"How is player privacy handled?"**
+</details>
 
-Phone numbers are never shown publicly. We have a "Phone Gate" — your number is shared only with confirmed squad members (people who are actually playing in the same match as you) and only during the match window. Supabase Row-Level Security ensures users can only read/write their own data at the database level.
+<details>
+<summary><strong>Why Capacitor instead of React Native or Flutter?</strong></summary>
 
-**"What's the tech stack in one sentence?"**
+We wanted to ship fast using a TypeScript/React stack we already knew deeply, while still having full access to native APIs (GPS, push, filesystem). Capacitor gives us that, plus a single codebase that compiles to Android today and iOS tomorrow with one command (`npx cap add ios`).
+
+</details>
+
+<details>
+<summary><strong>How is player phone number privacy handled?</strong></summary>
+
+Phone numbers are never shown publicly. Our "Phone Gate" component reveals a number only to confirmed squad members of the same match, only during the active match window. This is enforced both at the UI layer and at the Supabase database layer via Row-Level Security policies.
+
+</details>
+
+<details>
+<summary><strong>Can I use this for football, badminton, or other sports?</strong></summary>
+
+Not yet, but it's architected for it. Turf search already discovers football turfs and futsal courts. The `Match` type includes a `sportType` field. Multi-sport support is the v3.0 milestone (Q2 2027).
+
+</details>
+
+<details>
+<summary><strong>What's the tech stack in one sentence?</strong></summary>
 
 Next.js 16 + React 19 + TypeScript + Tailwind CSS 4 + Supabase (Postgres + Auth + Realtime + Storage) + Capacitor 8 (Android) + Firebase FCM + Google Places/Routes APIs + GitHub Actions CI/CD.
 
+</details>
+
 ---
 
-<p align="center">
-  <br/>
-  <strong>🏏 Stop searching WhatsApp groups. Start playing.</strong>
-  <br/><br/>
-  <a href="https://www.turfmatch.app">
-    <img src="https://img.shields.io/badge/Download_TurfMatch-4edea3?style=for-the-badge&logoColor=white&logo=google-play" alt="Download" />
-  </a>
-  <br/><br/>
-  <sub>Built with ❤️ in Pune, India 🇮🇳</sub>
-  <br/>
-  <sub>© 2026 TurfMatch · All rights reserved</sub>
-</p>
+<div align="center">
+
+---
+
+### 🏏 Stop searching WhatsApp groups. Start playing.
+
+[![Download TurfMatch](https://img.shields.io/badge/📲_Download_TurfMatch-4edea3?style=for-the-badge&logoColor=white)](https://www.turfmatch.app)
+[![Visit Website](https://img.shields.io/badge/🌐_turfmatch.app-0c1324?style=for-the-badge)](https://www.turfmatch.app)
+
+---
+
+Built with ❤️ in Pune, India 🇮🇳
+
+**Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Supabase · Capacitor 8 · Firebase FCM · Google Maps**
+
+© 2026 TurfMatch · All rights reserved
+
+</div>
