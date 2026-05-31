@@ -33,9 +33,9 @@
 
 - [The Problem](#-the-problem)
 - [The Solution](#-the-solution)
+- [Live Demo & Screenshots](#-live-demo--screenshots)
 - [How Turf Search Works](#-how-turf-search-works)
 - [Features](#-features)
-- [Admin Dashboard & OTA System](#-admin-dashboard--ota-system)
 - [Architecture](#-architecture)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#️-project-structure)
@@ -43,6 +43,7 @@
 - [Environment Variables](#-environment-variables)
 - [Database Schema](#-database-schema)
 - [Security & Privacy](#-security--privacy)
+- [Admin Dashboard & OTA System](#️-admin-dashboard--ota-system)
 - [Engineering Highlights](#-engineering-highlights)
 - [Design System](#-design-system)
 - [Business Model](#-business-model)
@@ -87,6 +88,50 @@ India has **30 million+ recreational cricketers** spread across **50,000+ box cr
 │                         scores                                       │
 └──────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 🎥 Live Demo & Screenshots
+
+> **This is not a prototype.** Download the APK from [turfmatch.app](https://www.turfmatch.app) on any Android device right now.
+
+<details>
+<summary><strong>▶ View App Screen Gallery (30 screens)</strong></summary>
+
+| # | Screen | Description |
+|---|--------|-------------|
+| 1 | **Splash** | Branded boot with 5-stage diagnostics |
+| 2 | **Onboarding** | Animated feature carousel |
+| 3 | **Auth** | Google Sign-In + OTP + profile setup |
+| 4 | **Home** | Match feed, quick actions, live matches, nearby turfs |
+| 5 | **Grounds Hub** | Turf discovery with smart filters |
+| 6 | **Ground Detail** | Photos, amenities, slots, call & navigate |
+| 7 | **Turf Map** | Leaflet map with clustered turf pins |
+| 8 | **Live Navigation** | Turn-by-turn with polyline route overlay |
+| 9 | **Match Detail** | Full info, squad list, join / request actions |
+| 10 | **Create Match** | Multi-step: ground picker, rules, pricing |
+| 11 | **My Matches** | Created / Joined / Pending / History / Invites |
+| 12 | **Manage Requests** | Accept / decline with player profiles inline |
+| 13 | **Players** | Discovery: skill, availability, distance filters |
+| 14 | **Player Profile** | Career stats, form, reliability score, badge |
+| 15 | **Profile** | Edit name, avatar, city, zone, phone, role |
+| 16 | **Notifications** | Categorized, realtime badge, read/unread |
+| 17 | **Chat Inbox** | Match threads with unread counters |
+| 18 | **Chat Room** | In-match messaging + system events |
+| 19 | **Tournaments** | Browser with status filters |
+| 20 | **Tournament Detail** | Rules, schedule, entry fee, registration |
+| 21 | **Bracket View** | Interactive QF → SF → Final visualization |
+| 22 | **Team Registration** | Squad signup |
+| 23 | **Live Scorecard** | Ball-by-ball with batter / bowler stats |
+| 24 | **Score Entry** | Organizer ball-input interface |
+| 25 | **Share Card** | Shareable match invite card generation |
+| 26 | **Availability Card** | Player availability status display |
+| 27 | **Filter Sheet** | Draggable multi-criteria filter panel |
+| 28 | **Offline Screen** | Clean offline state with retry |
+| 29 | **Location Denied** | Permission request flow |
+| 30 | **Your Matches** | Quick-access match management |
+
+</details>
 
 ---
 
@@ -184,6 +229,12 @@ Step 5 ──▶  Render: photos, rating, distance, price, slots,
 - System event messages (booking confirmed, player joined, navigation started)
 - Unread badge counters with realtime sync
 
+### 🔄 OTA Updates (Zero App Store Wait)
+- **Admin panel website** — upload new builds, configure rollouts, and manage versions from a dedicated web dashboard
+- **Staged rollouts** — set rollout percentage (0–100%) and target channel (dev / beta / stable) per release
+- **Auto-rollback** — consecutive failure detection automatically reverts to the last stable bundle
+- **SHA-256 integrity verification** — every bundle is checksum-validated on-device before the hot-swap applies
+
 ### 🛡️ Bulletproof Bootstrap
 5-stage deterministic startup — zero race conditions:
 ```
@@ -197,71 +248,6 @@ Each stage gates the next. A query cannot fire before auth. Loading never hangs 
 - Background silent refresh on foreground
 - 3-attempt retry with exponential backoff
 - 10-second hard timeout on every Supabase query
-
----
-
-## 🖥️ Admin Dashboard & OTA System
-
-TurfMatch includes a **separate admin web panel** (not included in this repo) with a full **APK distribution & OTA update system**:
-
-### How OTA Updates Work
-
-```
-Admin uploads signed APK via dashboard
-      │
-      ├─ Phase 1: HASH
-      │    Client-side SHA-256 via Web Crypto API
-      │
-      ├─ Phase 2: SIGN
-      │    POST /api/admin/apk/sign-upload
-      │    ├─ Validates semver, versionCode, fileSize, sha256
-      │    ├─ Creates Supabase Storage signed upload URL
-      │    └─ Inserts DRAFT row in `app_versions` table
-      │
-      ├─ Phase 3: UPLOAD
-      │    XHR PUT directly to Supabase Storage (bypasses Vercel 4.5 MB limit)
-      │    └─ Real-time progress: bytes uploaded, %, KB/s speed, ETA countdown
-      │
-      └─ Phase 4: FINALIZE
-           POST /api/admin/apk/finalize
-           ├─ Verifies APK exists in storage bucket
-           ├─ Archives previous active version on same channel
-           └─ Sets status → "active", published_at = now()
-```
-
-### Version Check Flow (called by the app on every launch)
-
-```
-GET /api/version.json?deviceId=xxx&versionCode=2&channel=stable&sdk=31
-
-Server logic:
-  ├─ Is target versionCode > device's current?  → yes: update available
-  ├─ Is device SDK ≥ min_android_sdk?            → no:  update blocked
-  ├─ Is rollout_pct < 100?                       → hash(deviceId) % 100 to decide
-  ├─ Is update mandatory?                        → bypasses staged rollout
-  └─ Upserts device_update_state for dashboard "active devices" counter
-```
-
-### Admin Dashboard Features
-
-| Feature | Details |
-|---------|---------|
-| **Upload signed APK** | Drag-and-drop with SHA-256 verification |
-| **Version management** | Activate / Archive / Rollback / Delete per version |
-| **Staged rollouts** | 0–100% slider, device hash bucketing |
-| **Mandatory toggle** | Force-update blocks app until installed |
-| **Channel targeting** | dev / beta / stable release channels |
-| **Install analytics** | Success / failed / in-progress counts per version |
-| **Device tracking** | Active devices (7d), devices by version bar chart |
-| **Failure alerting** | ⚠️ warning badge when failure rate > 5% |
-| **Realtime refresh** | Dashboard auto-refreshes via Supabase subscription |
-
-### Auto-Rollback (Client-Side)
-
-The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive failures:
-- 3 failed installs in a row → **automatic rollback** to last stable bundle
-- Device state machine: `idle → downloading → rebooting → idle` (or `→ failed`)
-- All bundles verified by SHA-256 checksum before hot-swap
 
 ---
 
@@ -301,9 +287,9 @@ The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive f
 ║                                                                     ║
 ║  ┌──────────┐  ┌──────────┐  ┌───────────────┐  ┌─────────────┐  ║
 ║  │ Supabase │  │ Firebase │  │ Google Maps   │  │ OTA Engine  │  ║
-║  │ Postgres │  │   FCM    │  │ Places API    │  │ (Capgo +    │  ║
-║  │ Auth     │  │  Push    │  │ Routes API v2 │  │  ApkUpdater)│  ║
-║  │ Storage  │  │  Notifs  │  │ Nominatim     │  │             │  ║
+║  │ Postgres │  │   FCM    │  │ Places API    │  │ Admin Panel │  ║
+║  │ Auth     │  │  Push    │  │ Routes API v2 │  │ + ApkUpdater│  ║
+║  │ Storage  │  │  Notifs  │  │ Nominatim     │  │ (on-device) │  ║
 ║  │ Realtime │  │          │  │ OSRM fallback │  │             │  ║
 ║  └──────────┘  └──────────┘  └───────────────┘  └─────────────┘  ║
 ║                                                                     ║
@@ -324,7 +310,7 @@ The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive f
 | **Data layer** | Repository pattern + guard wrappers | Prevents unauthenticated / offline queries at the call site |
 | **State** | React Context + module-level caches | No Redux overhead for a focused mobile app |
 | **Realtime** | Supabase Postgres Changes | < 500ms updates; eliminates all polling |
-| **Updates** | Capgo OTA + Custom APK Updater | JS hotfixes in minutes; native changes via silent APK self-update |
+| **Updates** | OTA Admin Panel + Custom APK Updater | JS fixes deployed in minutes via admin dashboard; native changes via silent APK self-update |
 | **Maps** | Google Places (New) + Routes v2 + Leaflet | Best discovery quality with open-source cost-saving fallback |
 
 ---
@@ -365,7 +351,7 @@ The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive f
 | **Nominatim** | Reverse geocoding |
 | **OSRM** | Fallback open-source routing |
 | **Capacitor 8** | Native Android bridge |
-| **Capgo** | OTA bundle delivery |
+| **OTA Admin Panel** | Web dashboard for bundle uploads, rollout control, and version management |
 | **GitHub Actions** | CI/CD pipeline |
 | **Vercel** | Web hosting & edge analytics |
 
@@ -449,7 +435,7 @@ turfmatch/
 ├── android/                          # Capacitor Android native project
 ├── .github/
 │   └── workflows/
-│       └── ota-deploy.yml            # Automated OTA CI/CD pipeline
+│       └── build.yml                 # CI build pipeline
 └── public/                           # Static assets, icons, splash screens
 ```
 
@@ -502,14 +488,19 @@ npx cap open android    # Open Android Studio
 ### 5 — Deploy an OTA update
 
 ```bash
-git push origin main
-# GitHub Actions automatically:
-#   1. npm run build
-#   2. zip the bundle
-#   3. SHA-256 checksum
-#   4. Upload to Supabase Storage
-#   5. Insert version record
-#   ✓  Devices hot-swap the code on next launch
+# 1. Build the production bundle
+npm run build
+
+# 2. Open the OTA Admin Panel in your browser
+#    (your self-hosted admin panel URL)
+
+# 3. Upload the /out bundle through the admin panel
+#    The panel handles: zip → SHA-256 → Supabase Storage → version record
+
+# 4. Set your rollout config in the admin panel:
+#    - Channel: dev | beta | stable
+#    - Rollout %: 0–100
+#    ✓  Devices receive and hot-swap the update on next launch
 ```
 
 ---
@@ -522,7 +513,7 @@ git push origin main
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase anon (public) key |
 | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | ✅ | Google Maps + Places + Routes |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | ✅ | Google OAuth client ID (for Sign-In) |
-| `SUPABASE_SERVICE_ROLE_KEY` | ⚠️ CI only | Used in GitHub Actions & Admin — never expose client-side |
+| `SUPABASE_SERVICE_ROLE_KEY` | ⚠️ CI only | Used in GitHub Actions — never expose client-side |
 
 ---
 
@@ -531,14 +522,12 @@ git push origin main
 ```sql
 -- Core tables (Supabase / Postgres)
 
-players              -- profile, stats, zone, badge, reliability_score, push_token
-matches              -- sport, location, datetime, skill_level, slots, status
-match_players        -- join table: player ↔ match, role, join_status
-notifications        -- type, payload, read, delivered, deep_link_url
-chat_messages        -- match_id, sender_id, content, message_type
-app_versions         -- version, channel, bundle_url, checksum, rollout_pct, status
-apk_install_attempts -- version_id, device_id, outcome (installed/failed/downloading)
-device_update_state  -- device_id, current_version, last_check_at, update_status
+players            -- profile, stats, zone, badge, reliability_score
+matches            -- sport, location, datetime, skill_level, slots, status
+match_players      -- join table: player ↔ match, role, join_status
+notifications      -- type, payload, read, delivered, deep_link_url
+chat_messages      -- match_id, sender_id, content, message_type
+app_versions       -- version, channel, bundle_url, checksum, rollout_pct
 ```
 
 All tables are protected by **Row-Level Security (RLS)** policies.
@@ -554,11 +543,76 @@ Migrations live in `supabase/migrations/`.
 | **Phone Privacy Gate** | Numbers visible only to confirmed squad during the active match window |
 | **Auth Guard** | `guardedFetch()` wrapper — zero API calls until auth state is confirmed |
 | **JWT Rotation** | Handled automatically by Supabase |
-| **API Key Scoping** | `anon` key client-side (read-only RLS); `service_role` key only in CI/Admin |
+| **API Key Scoping** | `anon` key client-side (read-only RLS); `service_role` key only in CI |
 | **OTA Integrity** | SHA-256 checksum verified before every bundle install |
-| **APK Signing Verification** | Optional signing fingerprint pinning to prevent tampered APKs |
 | **Form Validation** | Zod schemas on all inputs — client and server side |
 | **Install Permissions** | `REQUEST_INSTALL_PACKAGES` flow surfaced with clear UI for APK updates |
+
+---
+
+## 🖥️ Admin Dashboard & OTA System
+
+TurfMatch includes a **separate admin web panel** (not included in this repo) with a full **APK distribution & OTA update system**.
+
+### How OTA Updates Work
+
+```
+Admin uploads signed APK via dashboard
+      │
+      ├─ Phase 1: HASH
+      │    Client-side SHA-256 via Web Crypto API
+      │
+      ├─ Phase 2: SIGN
+      │    POST /api/admin/apk/sign-upload
+      │    ├─ Validates semver, versionCode, fileSize, sha256
+      │    ├─ Creates Supabase Storage signed upload URL
+      │    └─ Inserts DRAFT row in `app_versions` table
+      │
+      ├─ Phase 3: UPLOAD
+      │    XHR PUT directly to Supabase Storage (bypasses Vercel 4.5 MB limit)
+      │    └─ Real-time progress: bytes uploaded, %, KB/s speed, ETA countdown
+      │
+      └─ Phase 4: FINALIZE
+           POST /api/admin/apk/finalize
+           ├─ Verifies APK exists in storage bucket
+           ├─ Archives previous active version on same channel
+           └─ Sets status → "active", published_at = now()
+```
+
+### Version Check Flow (called by the app on every launch)
+
+```
+GET /api/version.json?deviceId=xxx&versionCode=2&channel=stable&sdk=31
+
+Server logic:
+  ├─ Is target versionCode > device's current?  → yes: update available
+  ├─ Is device SDK ≥ min_android_sdk?            → no:  update blocked
+  ├─ Is rollout_pct < 100?                       → hash(deviceId) % 100 to decide
+  ├─ Is update mandatory?                        → bypasses staged rollout
+  └─ Upserts device_update_state for dashboard "active devices" counter
+```
+
+### Admin Dashboard Features
+
+| Feature | Details |
+|---------|---------|
+| **Upload signed APK** | Drag-and-drop with client-side SHA-256 verification |
+| **Version management** | Activate / Archive / Rollback / Delete per version |
+| **Staged rollouts** | 0–100% slider with device hash bucketing |
+| **Mandatory toggle** | Force-update blocks app until installed |
+| **Channel targeting** | dev / beta / stable release channels |
+| **Install analytics** | Success / failed / in-progress counts per version |
+| **Device tracking** | Active devices (7d), devices-by-version bar chart |
+| **Failure alerting** | ⚠️ warning badge when failure rate > 5% |
+| **Realtime refresh** | Dashboard auto-refreshes via Supabase subscription |
+
+### Auto-Rollback (Client-Side)
+
+The mobile app's OTA engine (`lib/ota/rollback-manager.ts`) tracks consecutive failures:
+
+- 3 failed installs in a row → **automatic rollback** to last stable bundle
+- Device state machine: `idle → downloading → rebooting → idle` (or `→ failed`)
+- All bundles verified by SHA-256 checksum on-device before hot-swap applies
 
 ---
 
@@ -636,22 +690,9 @@ Loading state          ──stuck > 8s──▶  Force-resolve (never infinite 
 OTA download           ──3 failures──▶  Auto-rollback to last stable bundle
 ```
 
-### 5 · Full OTA Pipeline (Admin → Device)
+### 5 · Zero-Downtime OTA Pipeline
 
-```
-Admin Dashboard: Upload signed APK
-      │
-      ├─▶  Client-side SHA-256 hash
-      ├─▶  POST /api/admin/apk/sign-upload → creates draft + signed URL
-      ├─▶  XHR PUT direct to Supabase Storage (progress bar, KB/s, ETA)
-      ├─▶  POST /api/admin/apk/finalize → activates, archives prior version
-      │
-Device on next launch:
-      ├─▶  GET /api/version.json?versionCode=X&channel=stable&deviceId=Y
-      ├─▶  Server: versionCode comparison + SDK check + staged rollout hash
-      ├─▶  Download APK → verify SHA-256 → trigger Android install
-      └─▶  3 consecutive failures → auto-rollback to last stable
-```
+The full APK upload flow, version check logic, staged rollout bucketing, and auto-rollback system are documented in detail in the [Admin Dashboard & OTA System](#️-admin-dashboard--ota-system) section above.
 
 ---
 
@@ -684,7 +725,7 @@ Device on next launch:
 | Lines of application code | **22,143** |
 | App screens | **30** |
 | Reusable UI components | **14 custom + 30 Radix** |
-| Supabase tables | **8** |
+| Supabase tables | **6+** |
 | Realtime channels | **5** |
 | External API integrations | **4** |
 | Android notification channels | **5** |
@@ -698,25 +739,47 @@ Device on next launch:
 
 ## 📈 Business Model
 
-### Market Size
+### What is TurfMatch?
+
+TurfMatch is **India's social home for cricket** — a modern platform built to connect cricket players, teams, organizers, and turf owners in one seamless ecosystem.
+
+> *"Cricket in India is more than just a sport. It is a lifestyle, a passion, and a community."*
+
+Designed specifically for the Indian cricket community, TurfMatch removes the chaos of finding players, managing teams, and coordinating through endless WhatsApp groups — so players spend less time organising and more time actually playing.
+
+### Who is it for?
+
+| User Type | How TurfMatch Helps |
+|-----------|---------------------|
+| 🏏 **Casual players** | Discover nearby matches, join with one tap, play tonight |
+| 👥 **Team captains** | Build squads, manage rosters, coordinate match-day |
+| 🎯 **Match organizers** | Create matches, invite players, handle slots in one place |
+| 🏟️ **Turf owners** | Get discovered by players, fill empty slots, grow bookings |
+| 🏆 **Tournament hosts** | Run brackets, manage registrations, track live results |
+
+### Market Opportunity
 
 | Tier | Value | Scope |
 |------|-------|-------|
-| **TAM** | ₹15,000 Cr (~$1.8B) | Indian recreational sports |
+| **TAM** | ₹15,000 Cr (~$1.8B) | Indian cricket turf & sports ecosystem |
 | **SAM** | ₹3,000 Cr (~$360M) | Urban box cricket + turf bookings |
 | **SOM (Year 1)** | ₹50 Cr (~$6M) | Pune + Mumbai metro launch |
 
-**30M+** recreational cricketers · **50,000+** turfs · growing **25% YoY**
+**30M+** cricket players across India · **50,000+** turfs · growing **25% YoY**
 
-### Revenue Streams
+### Current Model: Free for Everyone
 
-| Stream | Mechanism |
-|--------|-----------|
-| 🎫 **Match Fees** | 5–10% platform commission per player transaction |
-| 🏟️ **Turf Partnerships** | Featured listings, premium placement, booking commissions |
-| 🏆 **Tournament Hosting** | Entry fee share + sponsored tournaments with prize pools |
-| ⭐ **Player Premium** | Priority matching, advanced stats, badge boosts |
-| 📊 **Data Insights** | Anonymized sports analytics for brands & equipment makers |
+TurfMatch is **completely free** to download and use. We're in **early access**, focused on building the cricket community first — monetisation comes later.
+
+### Future Revenue Streams (Post-Scale)
+
+| Stream | How it works |
+|--------|-------------|
+| 🏟️ **Turf partnerships** | Featured listings and booking commissions for turf owners |
+| 🏆 **Tournament hosting** | Platform fee on entry fees + sponsored prize-pool tournaments |
+| ⭐ **Player premium** | Priority matching, advanced career stats, badge boosts |
+| 📊 **Cricket analytics** | Anonymised data insights for brands & equipment makers |
+| 🎯 **Targeted promotions** | Cricket gear brands reaching active players by city & skill tier |
 
 ### Competitive Landscape
 
@@ -724,8 +787,8 @@ Device on next launch:
 |-----------|-------------|---------------------|
 | **Playo** | Manual match listings | Real-time matchmaking + live scoring + navigation |
 | **Hudle** | Venue booking only | Full loop: discover → match → navigate → play → score |
-| **SportVot** | Live streaming | Grassroots focus — getting people on the ground |
-| **WhatsApp Groups** | Unstructured chaos | Reliability scores, skill filters, structured workflows |
+| **SportVot** | Live streaming focus | Grassroots-first — getting people playing, not just watching |
+| **WhatsApp Groups** | Unstructured chaos | Skill filters, reliability scores, zero spam |
 
 ---
 
@@ -803,7 +866,7 @@ No. Zero server cost. The app is a Next.js static export (HTML/JS/CSS) inside a 
 <details>
 <summary><strong>How do OTA updates work exactly?</strong></summary>
 
-An admin uploads a signed APK via our admin dashboard. The system computes SHA-256, uploads directly to Supabase Storage via signed URL, and inserts a version record with channel, rollout %, and mandatory flag. When a user opens the app, it calls `/api/version.json` — the server checks versionCode, SDK compatibility, and staged rollout eligibility. If eligible, the app downloads, verifies the checksum, and installs. If 3 consecutive devices report failures, it auto-rolls back.
+We build the Next.js bundle locally (`npm run build`), then upload it through the OTA Admin Panel — a dedicated web dashboard that handles zipping, SHA-256 checksumming, uploading to Supabase Storage, and inserting a version record. From the admin panel you choose the release channel (dev / beta / stable) and the rollout percentage (0–100%). The next time a user opens the app, it fetches the latest version record for their channel, downloads the bundle, verifies the SHA-256 checksum on-device, and hot-swaps the JavaScript. No app store review needed. If 3 consecutive devices report install failures, it auto-rolls back to the previous stable bundle.
 
 </details>
 
@@ -825,13 +888,6 @@ Phone numbers are never shown publicly. Our "Phone Gate" component reveals a num
 <summary><strong>Can I use this for football, badminton, or other sports?</strong></summary>
 
 Not yet, but it's architected for it. Turf search already discovers football turfs and futsal courts. The `Match` type includes a `sportType` field. Multi-sport support is the v3.0 milestone (Q2 2027).
-
-</details>
-
-<details>
-<summary><strong>What's the tech stack in one sentence?</strong></summary>
-
-Next.js 16 + React 19 + TypeScript + Tailwind CSS 4 + Supabase (Postgres + Auth + Realtime + Storage) + Capacitor 8 (Android) + Firebase FCM + Google Places/Routes APIs + GitHub Actions CI/CD.
 
 </details>
 
